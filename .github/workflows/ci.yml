@@ -78,8 +78,20 @@ jobs:
 
       # --no-fatal-infos: las sugerencias de estilo se corrigen, pero no rompen
       # la construcción. Los errores y advertencias reales sí la detienen.
+      # Cada hallazgo se republica como anotación para que aparezca señalado
+      # sobre el código en el pull request, no enterrado en el log.
       - name: Análisis estático
-        run: flutter analyze --no-fatal-infos
+        run: |
+          set +e
+          flutter analyze --no-fatal-infos > analyze.log 2>&1
+          code=$?
+          cat analyze.log
+          if [ "$code" -ne 0 ]; then
+            while IFS= read -r line; do
+              [ -n "$line" ] && echo "::error::${line}"
+            done < analyze.log
+          fi
+          exit "$code"
 
       - name: Pruebas
         run: flutter test
