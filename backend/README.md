@@ -33,7 +33,7 @@ credenciales de AWS y sin red.
 
 ```bash
 pip install -r requirements-dev.txt
-pytest --cov=src      # 109 pruebas
+pytest --cov=src      # 112 pruebas
 ruff check .
 bandit -r src/ -ll
 ```

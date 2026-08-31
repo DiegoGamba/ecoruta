@@ -86,7 +86,7 @@ resource "aws_cloudwatch_log_group" "fn" {
   for_each          = local.functions
   name              = "/aws/lambda/${local.name}-${each.key}"
   retention_in_days = var.log_retention_days
-  kms_key_id        = aws_kms_key.main.arn
+  kms_key_id        = local.kms_arn
 }
 
 resource "aws_iam_role" "fn" {
@@ -132,11 +132,12 @@ resource "aws_iam_role_policy" "fn_scoped" {
         Action   = local.policy_statements[p].actions
         Resource = local.policy_statements[p].resources
       }],
-      [{
+      # El permiso sobre la clave solo existe si hay clave propia que usar.
+      var.use_customer_managed_key ? [{
         Effect   = "Allow"
         Action   = ["kms:Decrypt", "kms:GenerateDataKey"]
-        Resource = aws_kms_key.main.arn
-      }]
+        Resource = local.kms_arn
+      }] : []
     )
   })
 }
@@ -164,6 +165,7 @@ resource "aws_lambda_function" "fn" {
       LOG_LEVEL           = local.is_prod ? "INFO" : "DEBUG"
       CLUSTER_RADIUS_M    = "120"
       CLUSTER_MIN_REPORTS = "3"
+      EVIDENCE_SSE        = local.evidence_sse
     }
   }
 

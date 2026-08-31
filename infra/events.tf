@@ -47,7 +47,8 @@ resource "aws_lambda_permission" "allow_eventbridge" {
 resource "aws_sqs_queue" "dlq" {
   name                      = "${local.name}-dlq"
   message_retention_seconds = 1209600 # 14 días
-  kms_master_key_id         = aws_kms_key.main.arn
+  # alias/aws/sqs es la clave administrada por AWS: cifra sin costo de custodia.
+  kms_master_key_id = var.use_customer_managed_key ? local.kms_arn : "alias/aws/sqs"
 }
 
 resource "aws_sqs_queue_policy" "dlq" {
@@ -69,7 +70,7 @@ resource "aws_sqs_queue_policy" "dlq" {
 
 resource "aws_sns_topic" "alerts" {
   name              = "${local.name}-alertas"
-  kms_master_key_id = aws_kms_key.main.arn
+  kms_master_key_id = var.use_customer_managed_key ? local.kms_arn : "alias/aws/sns"
 }
 
 resource "aws_sns_topic_subscription" "operador" {

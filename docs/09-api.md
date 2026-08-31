@@ -161,12 +161,18 @@ Grupo requerido: ninguno.
 {
   "upload_url": "https://ecoruta-dev-evidencias-....s3.amazonaws.com/...",
   "evidence_key": "evidencias/2026/08/31/a3f1c9d2e4b7/....jpg",
-  "expires_in": 300
+  "expires_in": 300,
+  "required_headers": {
+    "Content-Type": "image/jpeg"
+  }
 }
 ```
 
-La subida debe hacerse con `PUT`, el mismo `Content-Type` declarado y la cabecera
-`x-amz-server-side-encryption: aws:kms`. La URL caduca a los 5 minutos.
+La subida debe hacerse con `PUT` reenviando **exactamente** las cabeceras de
+`required_headers`: forman parte de la firma y S3 rechaza la petición si no coinciden.
+El servidor las calcula porque dependen del cifrado del bucket, que varía por ambiente
+—con clave KMS propia se añade `x-amz-server-side-encryption: aws:kms`—, de modo que la
+app no necesita conocer ese detalle. La URL caduca a los 5 minutos.
 
 ---
 

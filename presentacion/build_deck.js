@@ -202,7 +202,9 @@ function footer(s, n) {
     },
   );
   footer(s, 2);
-  s.addNotes("El ciclo entre que el residuo aparece y la cuadrilla llega es largo, y los costos son evitables.");
+  s.addNotes(
+    "PROBLEMA (90 s). Empiece con un caso concreto: 'todos conocemos una esquina del barrio donde aparece basura; la recogen y a la semana vuelve media cuadra mas alla'. Luego los tres rasgos sin leerlos: es dinamico (el inventario queda obsoleto en semanas), es local (lo detecta el vecino, no el operador de la macro-ruta), la informacion no fluye (texto libre sin coordenadas obliga a verificar en campo). Cierre con la consecuencia operativa.",
+  );
 }
 
 /* ---------- 3 · pregunta y objetivos ---------- */
@@ -272,6 +274,9 @@ function footer(s, n) {
     });
   });
   footer(s, 3);
+  s.addNotes(
+    "DELIMITACION (60 s). Lea la pregunta de investigacion completa y en voz alta: es lo que convierte el trabajo en algo evaluable y es lo que el jurado de semillero espera oir. De los cinco objetivos mencione solo el 1 y el 2; el resto esta en pantalla.",
+  );
 }
 
 /* ---------- 4 · la solución ---------- */
@@ -325,6 +330,9 @@ function footer(s, n) {
   statCard(s, { x: M + (CW - 0.6) / 3 + 0.3, y: 4.85, w: (CW - 0.6) / 3, value: "120 m", label: "Radio de agrupamiento", note: "Configurable entre 30 y 1000 m según el territorio" });
   statCard(s, { x: M + 2 * ((CW - 0.6) / 3 + 0.3), y: 4.85, w: (CW - 0.6) / 3, value: "3", label: "Reportes mínimos", note: "Umbral para que un grupo se considere punto crítico" });
   footer(s, 4);
+  s.addNotes(
+    "SOLUCION (60 s). Recorra los cinco pasos, una frase cada uno. AQUI VA LA DEMOSTRACION EN VIVO: tome una foto con el celular, envie el reporte, muestre el mapa. Remate: 'lo que acaban de ver son treinta segundos; si reportar cuesta mas que ignorar el problema, nadie reporta'.",
+  );
 }
 
 /* ---------- 5 · arquitectura ---------- */
@@ -364,8 +372,7 @@ function footer(s, n) {
   });
   footer(s, 5);
   s.addNotes(
-    "La foto no atraviesa la capa de cómputo: la app pide una URL prefirmada y sube directo a S3. " +
-    "Eso evita el límite de 6 MB de Lambda y reduce latencia y costo.",
+    "ARQUITECTURA (2 min). La diapositiva mas importante para la nota. No enumere servicios: explique decisiones. Borde: la validacion del token la hace API Gateway, no mi codigo. Computo: ocho funciones para tener minimo privilegio real. Datos: una sola tabla y ninguna operacion usa Scan. La flecha gruesa: la foto no atraviesa el computo, la app sube directo a S3 con URL prefirmada, lo que evita el limite de 6 MB de Lambda.",
   );
 }
 
@@ -424,6 +431,9 @@ function footer(s, n) {
     },
   );
   footer(s, 6);
+  s.addNotes(
+    "JUSTIFICACION (90 s, recortable). No lea las seis filas: elija dos y explíquelas bien. Luego mencione lo descartado, que es lo que demuestra criterio: 'consideré PostgreSQL con PostGIS; lo descarté porque mis consultas son de proximidad, que el geohash resuelve a costo constante, y PostGIS obligaba a una instancia siempre encendida en una VPC que costaria mas que toda la solucion'.",
+  );
 }
 
 /* ---------- 7 · modelo de datos ---------- */
@@ -483,6 +493,9 @@ function footer(s, n) {
     });
   });
   footer(s, 7);
+  s.addNotes(
+    "MODELO DE DATOS (90 s, recortable). Frase clave: 'en DynamoDB uno no disena desde las entidades sino desde las consultas; tengo exactamente cuatro y cada una tiene su clave'. Si hay tiempo explique el geohash a dos precisiones (se guarda con 7, se particiona por 6) para que las particiones no sean ni diminutas ni calientes.",
+  );
 }
 
 /* ---------- 8 · algoritmo ---------- */
@@ -533,6 +546,9 @@ function footer(s, n) {
     });
   });
   footer(s, 8);
+  s.addNotes(
+    "ALGORITMO (2 min). Aqui se gana el criterio de rigor tecnico: es lo unico verdaderamente propio del proyecto. Explique los cuatro pasos y sea explicito con el umbral: 'un grupo solo es punto critico con tres o mas reportes; sin ese umbral una queja aislada movilizaria una cuadrilla'. Senale el panel derecho: no son casos ilustrativos, son pruebas que corren en cada push.",
+  );
 }
 
 /* ---------- 9 · seguridad ---------- */
@@ -578,14 +594,17 @@ function footer(s, n) {
     },
   );
   footer(s, 9);
+  s.addNotes(
+    "SEGURIDAD (90 s). Elija dos tarjetas, no las seis: minimo privilegio real y seudonimizacion en logs. Luego LEA LA DEUDA RECONOCIDA: 'no verifico que la foto se tomo donde dice, no hay WAF y no desenfoco rostros; lo documente porque un analisis de seguridad que solo lista lo que si hice no es un analisis de seguridad'. Si no lo dice usted, se lo preguntan igual.",
+  );
 }
 
 /* ---------- 10 · calidad ---------- */
 {
   const s = lightSlide("Prácticas de ingeniería que sostienen el resultado", "Calidad");
 
-  statCard(s, { x: M, y: 1.5, w: (CW - 0.9) / 4, value: "109", label: "Pruebas automatizadas", note: "Corren sin credenciales de AWS y sin red" });
-  statCard(s, { x: M + ((CW - 0.9) / 4 + 0.3), y: 1.5, w: (CW - 0.9) / 4, value: "80 %", label: "Cobertura total", note: "Dominio y servicios al 100 %" });
+  statCard(s, { x: M, y: 1.5, w: (CW - 0.9) / 4, value: "112", label: "Pruebas automatizadas", note: "Corren sin credenciales de AWS y sin red" });
+  statCard(s, { x: M + ((CW - 0.9) / 4 + 0.3), y: 1.5, w: (CW - 0.9) / 4, value: "82 %", label: "Cobertura total", note: "Dominio y servicios al 100 %" });
   statCard(s, { x: M + 2 * ((CW - 0.9) / 4 + 0.3), y: 1.5, w: (CW - 0.9) / 4, value: "8", label: "Roles IAM", note: "Uno por función, permisos declarados" });
   statCard(s, { x: M + 3 * ((CW - 0.9) / 4 + 0.3), y: 1.5, w: (CW - 0.9) / 4, value: "0", label: "Recursos creados a mano", note: "Toda la infraestructura en Terraform" });
 
@@ -632,17 +651,16 @@ function footer(s, n) {
   });
   footer(s, 10);
   s.addNotes(
-    "Una prueba encontró un defecto real: create devolvía el ítem completo de DynamoDB, " +
-    "incluyendo user_id y ttl. Se corrigió centralizando la proyección pública.",
+    "CALIDAD (60 s). Los cuatro numeros y una historia concreta que vale mas que todos ellos: una prueba fallo la primera vez que la corri porque la API devolvia el identificador del usuario junto con el reporte. Es una fuga de datos personales que no se ve leyendo el codigo, solo se ve cuando alguien la prueba.",
   );
 }
 
 /* ---------- 11 · costos ---------- */
 {
-  const s = lightSlide("Menos de 4 dólares al mes en el piloto", "Costo de operación");
+  const s = lightSlide("Demostrarla no cuesta nada; operarla, cinco dólares", "Costo de operación");
 
   s.addText(
-    "Escenario: una localidad, 3.000 reportes y 30.000 consultas de mapa al mes, con foto promedio de 400 KB.",
+    "Operación real de una localidad: 3.000 reportes y 30.000 consultas de mapa al mes, con foto promedio de 400 KB.",
     {
       x: M, y: 1.5, w: CW, h: 0.35,
       fontFace: BODY, fontSize: 13.5, color: C.ink, isTextBox: true, margin: 0,
@@ -653,12 +671,12 @@ function footer(s, n) {
     pres.ChartType.doughnut,
     [{
       name: "Costo mensual (USD)",
-      labels: ["Rekognition", "EventBridge · SNS · CloudWatch", "DynamoDB", "S3", "Lambda", "API Gateway"],
-      values: [3.0, 0.6, 0.1, 0.05, 0.05, 0.04],
+      labels: ["Rekognition", "KMS", "EventBridge · SNS · CloudWatch", "DynamoDB", "S3", "Lambda", "API Gateway"],
+      values: [3.0, 1.0, 0.6, 0.1, 0.05, 0.05, 0.04],
     }],
     {
       x: M, y: 2.0, w: 6.2, h: 4.2,
-      chartColors: [C.forest, C.moss, "5A8F5B", "B8CFA0", "D4E2C4", C.line],
+      chartColors: [C.forest, C.moss, "5A8F5B", "7FA85C", "B8CFA0", "D4E2C4", C.line],
       holeSize: 55,
       showLegend: true, legendPos: "b",
       legendFontFace: BODY, legendFontSize: 10, legendColor: C.ink,
@@ -668,23 +686,27 @@ function footer(s, n) {
     },
   );
 
-  card(s, { x: 7.2, y: 2.0, w: CW - 6.5, h: 1.5, fill: C.deep });
-  s.addText("≈ 3,85 USD / mes", {
-    x: 7.55, y: 2.25, w: 5.2, h: 0.6,
-    fontFace: HEAD, fontSize: 32, bold: true, color: C.white, isTextBox: true, margin: 0,
+  card(s, { x: 7.2, y: 2.0, w: CW - 6.5, h: 1.55, fill: C.deep });
+  s.addText("0 USD", {
+    x: 7.55, y: 2.22, w: 5.2, h: 0.55,
+    fontFace: HEAD, fontSize: 34, bold: true, color: C.white, isTextBox: true, margin: 0,
   });
-  s.addText("Costo total estimado del piloto completo", {
-    x: 7.55, y: 2.88, w: 5.2, h: 0.3,
+  s.addText("La demostración cabe en la capa gratuita de AWS", {
+    x: 7.55, y: 2.82, w: 5.2, h: 0.3,
     fontFace: BODY, fontSize: 12, color: C.moss, isTextBox: true, margin: 0,
+  });
+  s.addText("Operación real de una localidad: ≈ 4,85 USD / mes", {
+    x: 7.55, y: 3.1, w: 5.2, h: 0.3,
+    fontFace: BODY, fontSize: 11.5, color: C.cream, isTextBox: true, margin: 0,
   });
 
   const notes = [
-    ["El 78 % del costo es Rekognition", "Un clasificador propio ejecutado en el dispositivo eliminaría casi todo el gasto variable."],
+    ["El 62 % del costo es Rekognition", "Un clasificador propio en el dispositivo eliminaría ese renglón: es el argumento económico de la investigación."],
     ["El resto escala a cero", "Sin tráfico no hay factura: no hay instancias, ni NAT Gateway, ni capacidad reservada."],
-    ["Decisiones que abaratan", "arm64 (~20 % menos por invocación), bucket key de KMS y ciclo de vida hacia clases frías en S3."],
+    ["La clave KMS es opcional", "Único cargo fijo del diseño (1 USD/mes). Desactivada por defecto; el dato sigue cifrado con claves de AWS."],
   ];
   notes.forEach(([t, d], i) => {
-    const y = 3.75 + i * 0.85;
+    const y = 3.85 + i * 0.85;
     s.addText(t, {
       x: 7.2, y, w: CW - 6.5, h: 0.28,
       fontFace: HEAD, fontSize: 14, bold: true, color: C.forest, isTextBox: true, margin: 0,
@@ -695,6 +717,9 @@ function footer(s, n) {
     });
   });
   footer(s, 11);
+  s.addNotes(
+    "COSTOS (60 s, recortable). 'La demostracion cabe en la capa gratuita; la operacion real de una localidad cuesta menos de cinco dolares al mes. Pero el dato interesante es la composicion: el 62 % es el servicio de vision por computador.' Ese puente hacia la investigacion es el mejor momento de la presentacion: uselo para pasar a la siguiente diapositiva.",
+  );
 }
 
 /* ---------- 12 · proyección investigativa ---------- */
@@ -756,6 +781,9 @@ function footer(s, n) {
     });
   });
   footer(s, 12);
+  s.addNotes(
+    "SEMILLERO (2 min). Si le interesa la convocatoria, esta es la diapositiva por la que vino. Nombre el vacio: hay literatura sobre reporte ciudadano y sobre clasificacion de residuos, poca sobre las dos juntas en ciudades latinoamericanas. Explique la Fase 1 con concrecion: comparar contra el inventario oficial publicado como dato abierto y medir precision y exhaustividad. Es un experimento ejecutable, no una intencion.",
+  );
 }
 
 /* ---------- 13 · entregables ---------- */
@@ -764,9 +792,9 @@ function footer(s, n) {
 
   const blocks = [
     ["mobile/", "App Flutter", "Modelos, servicios (API, auth, ubicación, cola sin conexión), pantallas de reporte y mapa, tema accesible Material 3 y pruebas."],
-    ["backend/", "API en Python 3.12", "Ocho handlers, capa de dominio y servicios, repositorios intercambiables, 109 pruebas y peticiones listas en api.http."],
+    ["backend/", "API en Python 3.12", "Ocho handlers, capa de dominio y servicios, repositorios intercambiables, 112 pruebas y peticiones listas en api.http."],
     ["infra/", "Terraform", "DynamoDB, S3, Cognito, Lambda con roles de mínimo privilegio, API Gateway, EventBridge, SNS, DLQ, alarmas y tablero."],
-    ["docs/", "Documentación técnica", "Nueve documentos: análisis, arquitectura, modelo de datos, seguridad, ADR, pruebas, proyección, despliegue y referencia de API."],
+    ["docs/", "Documentación técnica", "Diez documentos: análisis, arquitectura, modelo de datos, seguridad, ADR, pruebas, proyección, despliegue, API y guion de sustentación."],
   ];
   const bw = (CW - 0.9) / 4;
   blocks.forEach(([p, t, d], i) => {
@@ -804,6 +832,9 @@ function footer(s, n) {
     },
   );
   footer(s, 13);
+  s.addNotes(
+    "ENTREGABLES (30 s). Muestre el repositorio en vivo, no la diapositiva: baje por el README, abra un ADR, abra la carpeta de evidencias. Diez segundos de repositorio real valen mas que un minuto describiendolo.",
+  );
 }
 
 /* ---------- 14 · cierre ---------- */
@@ -831,7 +862,7 @@ function footer(s, n) {
   const closing = [
     ["Problema real y delimitado", "Puntos críticos dinámicos que los inventarios manuales no alcanzan"],
     ["Arquitectura justificada", "Cada servicio responde a un rasgo del problema, con alternativas descartadas por escrito"],
-    ["Ingeniería verificable", "109 pruebas, roles de mínimo privilegio, infraestructura como código y CI"],
+    ["Ingeniería verificable", "112 pruebas, roles de mínimo privilegio, infraestructura como código y CI"],
     ["Camino investigativo abierto", "Validación concurrente, corpus abierto y clasificador propio en el dispositivo"],
   ];
   closing.forEach(([t, d], i) => {

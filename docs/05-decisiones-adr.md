@@ -15,7 +15,8 @@ continua ni personal dedicado a infraestructura.
 manualmente, nada encendido sin uso.
 
 **Consecuencias.**
-- (+) Costo proporcional al uso; el piloto cuesta menos de 4 USD/mes.
+- (+) Costo proporcional al uso: la demostración cabe en la capa gratuita y la
+  operación real de una localidad ronda los 5 USD/mes.
 - (+) Sin parcheo de sistema operativo ni gestión de red.
 - (−) Arranque en frío de 200–400 ms en la primera invocación tras inactividad.
 - (−) Acoplamiento al proveedor: migrar exigiría reescribir la capa de adaptadores
@@ -87,7 +88,8 @@ peligrosos.
 **Consecuencias.**
 - (+) Funciona desde el primer día sin datos de entrenamiento.
 - (+) El mapeo es una tabla legible y comprobable, no una caja negra.
-- (−) Es el componente más caro (≈3 USD de los ≈3,85 mensuales).
+- (−) Es el componente más caro: el 62 % del costo operativo. En la demostración no
+  cuesta nada (1.000 imágenes/mes gratuitas durante 12 meses).
 - (−) Las etiquetas son genéricas y no conocen el contexto colombiano.
 - **Camino de evolución.** Sustituirlo por un modelo propio entrenado con las evidencias
   acumuladas es la principal línea de investigación del proyecto; Rekognition queda como
@@ -140,6 +142,37 @@ AWS por OIDC.
 - (+) Cero secretos de AWS almacenados en GitHub.
 - (−) Requiere un paso de arranque manual (crear el bucket de estado y el rol OIDC),
   documentado en el README.
+
+---
+
+## ADR-009 · Clave KMS propia opcional, desactivada por defecto
+
+**Contexto.** El diseño original cifraba DynamoDB, S3, los logs, SNS y SQS con una clave
+KMS propia del proyecto. Una clave administrada por el cliente cuesta 1 USD/mes de
+custodia, se cobre o no uso alguno. Ese cargo fijo es el único renglón que impedía
+desplegar el proyecto a costo cero, y convertía una demostración académica de dos días
+en una suscripción.
+
+**Decisión.** Introducir `use_customer_managed_key`, con valor por defecto `false`.
+Con `false` cada servicio usa la clave administrada por AWS correspondiente
+(`alias/aws/sqs`, `alias/aws/sns`, cifrado propio de S3 con AES256, clave de AWS en
+DynamoDB); con `true` se crea la clave del proyecto y todos los recursos la usan.
+
+**Consecuencias.**
+- (+) El despliegue de demostración cuesta prácticamente cero: los datos siguen cifrados
+  en reposo en ambos modos, porque lo que cambia es **quién custodia la clave**, no si
+  hay cifrado.
+- (+) La diferencia queda explícita y argumentada, en vez de escondida en un valor fijo.
+- (−) Con `false` se pierde lo que justifica una clave propia en producción: política de
+  clave propia, rotación anual auditable, revocación independiente de AWS y registro de
+  cada uso en CloudTrail bajo la clave del proyecto.
+- (−) El algoritmo de cifrado del bucket pasa a ser información que el cliente necesita
+  al subir la evidencia. Se resolvió haciendo que la API devuelva las cabeceras exactas
+  en `required_headers`: la app deja de asumir cómo está cifrado el bucket, lo que además
+  elimina un acoplamiento que ya existía.
+
+**Cuándo revertir.** En producción, o ante cualquier requisito de cumplimiento sobre
+custodia de claves: `use_customer_managed_key = true` en el `.tfvars` del ambiente.
 
 ---
 

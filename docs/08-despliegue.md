@@ -12,6 +12,26 @@
 Permisos de AWS necesarios: creación de Lambda, API Gateway, DynamoDB, S3, Cognito, IAM,
 KMS, EventBridge, SNS, SQS y CloudWatch.
 
+## 8.1.1 Antes de empezar: cuánto cuesta esto
+
+Con los valores por defecto de `terraform.tfvars.example`, **un despliegue de
+demostración cabe en la capa gratuita de AWS**. La variable `use_customer_managed_key`
+viene en `false` precisamente por eso: una clave KMS propia cuesta 1 USD/mes de custodia
+aunque no se use, y es el único cargo fijo del diseño. Los datos siguen cifrados en
+reposo con las claves administradas por AWS ([ADR-009](05-decisiones-adr.md)).
+
+Lo que conviene tener presente:
+
+- **Rekognition** regala 1.000 imágenes al mes durante 12 meses. Una demostración usa
+  decenas.
+- **CloudWatch** regala 10 alarmas; este proyecto crea 11. Es el único renglón que puede
+  facturar, del orden de 0,10 USD/mes. Para dejarlo en cero, comente la alarma
+  `dlq_no_vacia` en `monitoring.tf`.
+- **EventBridge** no tiene capa gratuita, pero cuesta 1 USD por millón de eventos.
+- Active alertas de facturación en la consola de AWS antes de desplegar; es buena
+  práctica independientemente de este proyecto.
+- Al terminar la evaluación, `terraform destroy` (§8.9) elimina todo lo creado.
+
 ## 8.2 Paso 0 — Estado remoto de Terraform (una sola vez por cuenta)
 
 Terraform guarda su estado en S3 con bloqueo, para que dos despliegues concurrentes no
@@ -126,7 +146,7 @@ ejecutar desde VS Code o IntelliJ.
 ```bash
 cd backend
 pip install -r requirements-dev.txt
-pytest --cov=src            # 109 pruebas
+pytest --cov=src            # 112 pruebas
 ruff check .
 bandit -r src/
 

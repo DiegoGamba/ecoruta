@@ -17,7 +17,7 @@ semántica que el real, sin credenciales, sin red y sin costo.
 
 ```
 $ pytest --cov=src
-109 passed in 0.54s
+112 passed in 0.49s
 
 Cobertura por módulo
   src/common/geo.py                 100 %
@@ -30,10 +30,10 @@ Cobertura por módulo
   src/common/models.py               98 %
   src/handlers/update_status.py      94 %
   ---------------------------------------
-  TOTAL                              80 %
+  TOTAL                              82 %
 ```
 
-El 20 % no cubierto corresponde a código que solo se ejecuta contra AWS real: los
+El 18 % no cubierto corresponde a código que solo se ejecuta contra AWS real: los
 métodos de `DynamoReportRepository`, la composición de clientes en `deps.py`, la firma de
 URLs y las llamadas a Rekognition y SNS. La lógica de decisión de esos módulos —el mapeo
 de etiquetas, la regla de urgencia— sí está cubierta al haberse extraído a funciones puras.

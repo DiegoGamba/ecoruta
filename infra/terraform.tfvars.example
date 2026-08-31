@@ -9,6 +9,10 @@ alert_email = ""
 # Orígenes del panel web que consumirá la API.
 cors_allowed_origins = ["http://localhost:5173"]
 
+# Clave KMS propia: 1 USD/mes de custodia. Dejar en false para desplegar sin costo;
+# activar en produccion, donde el control de la clave si lo justifica (ver ADR-009).
+use_customer_managed_key = false
+
 log_retention_days            = 30
 lambda_memory_mb              = 512
 enable_point_in_time_recovery = true

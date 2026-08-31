@@ -94,7 +94,7 @@ common/http, config, logging  ──────────────┘     
                                             models/ + geo/   dominio puro
 ```
 
-Las dependencias apuntan siempre hacia el dominio. Consecuencia práctica: las 92 pruebas
+Las dependencias apuntan siempre hacia el dominio. Consecuencia práctica: las 112 pruebas
 unitarias corren sin credenciales de AWS, sin red y en menos de un segundo, porque la
 lógica de negocio se ejercita contra el repositorio en memoria.
 
@@ -207,16 +207,50 @@ que es justamente el control que da confiabilidad al indicador de atención.
 |---|---|
 | **Escalabilidad** | Cómputo sin servidor con concurrencia automática; DynamoDB bajo demanda; sin cuello de botella compartido |
 | **Disponibilidad** | Servicios administrados multi-AZ por defecto; ninguna instancia propia que mantener |
-| **Seguridad** | JWT validado en el borde, IAM por función, cifrado KMS en reposo, TLS obligatorio, MFA opcional |
+| **Seguridad** | JWT validado en el borde, IAM por función, cifrado en reposo, TLS obligatorio, MFA opcional |
 | **Observabilidad** | Logs JSON estructurados, trazas X-Ray, 11 alarmas, tablero operativo |
-| **Mantenibilidad** | Capas con dependencias hacia el dominio, 92 pruebas, linting y análisis de seguridad en CI |
+| **Mantenibilidad** | Capas con dependencias hacia el dominio, 112 pruebas, linting y análisis de seguridad en CI |
 | **Costo** | Escala a cero; ARM64 (~20 % menos por invocación); ciclo de vida de S3 hacia clases frías |
 | **Resiliencia** | Cola local en el dispositivo, reintentos con DLQ, escrituras idempotentes por condición |
 
-## 2.7 Estimación de costos
+## 2.7 Costo de operación
 
-Escenario piloto: una localidad, 3.000 reportes/mes, 30.000 consultas de mapa/mes,
-foto promedio de 400 KB.
+El costo se analiza en dos escenarios, porque son decisiones distintas: validar la
+solución y operarla.
+
+### Escenario A — Piloto académico (lo que cuesta demostrarla)
+
+Un despliegue de demostración —decenas de reportes, un evaluador probando la app—
+cae **íntegramente dentro de la capa gratuita de AWS**:
+
+| Servicio | Capa gratuita aplicable | Consumo de la demo | Costo |
+|---|---|---|---|
+| Lambda | 1 M invocaciones y 400.000 GB-s al mes, **permanente** | < 500 invocaciones | 0,00 |
+| DynamoDB | 25 GB de almacenamiento, **permanente** | < 1 MB | 0,00 |
+| API Gateway HTTP | 1 M peticiones/mes durante 12 meses | < 500 | 0,00 |
+| S3 | 5 GB y 2.000 PUT durante 12 meses | < 20 MB | 0,00 |
+| Cognito | Usuarios activos mensuales sin costo hasta el umbral gratuito | 2 usuarios | 0,00 |
+| Rekognition | **1.000 imágenes/mes** (APIs de Grupo 2) durante 12 meses | < 30 imágenes | 0,00 |
+| SNS | 1 M publicaciones y 1.000 correos al mes | < 10 | 0,00 |
+| CloudWatch | 10 alarmas y 5 GB de logs al mes | 11 alarmas ⚠ | ~0,10 |
+| EventBridge | Sin capa gratuita: 1 USD por millón de eventos | < 500 eventos | ~0,00 |
+
+**Total de la demostración: prácticamente cero.** El único renglón facturable es la
+alarma número 11, unos diez centavos de dólar al mes.
+
+> **Decisión de diseño asociada.** La variable `use_customer_managed_key` viene en
+> `false` por defecto. Una clave KMS propia cuesta 1 USD/mes de custodia,
+> independientemente del uso; con `false` los datos siguen cifrados en reposo con las
+> claves administradas por AWS, que no tienen ese cargo. Se activa en producción, donde
+> el control de la política de clave y su rotación auditable sí justifican el costo.
+> Ver [ADR-009](05-decisiones-adr.md).
+
+Para no gastar nada al terminar: `terraform destroy` elimina todo lo creado.
+
+### Escenario B — Operación real
+
+Una localidad con 3.000 reportes/mes, 30.000 consultas de mapa/mes y foto promedio de
+400 KB, ya fuera de la capa gratuita:
 
 | Servicio | Consumo mensual | Costo estimado (USD) |
 |---|---|---|
@@ -224,13 +258,15 @@ foto promedio de 400 KB.
 | API Gateway HTTP | ~40.000 peticiones | 0,04 |
 | DynamoDB (bajo demanda) | ~50.000 lecturas + 6.000 escrituras | 0,10 |
 | S3 | 1,2 GB acumulados + PUT | 0,05 |
-| Rekognition | 3.000 imágenes | 3,00 |
+| Rekognition | 3.000 imágenes a 1 USD por millar | 3,00 |
 | EventBridge, SNS, CloudWatch | volumen bajo | 0,60 |
-| **Total aproximado** | | **≈ 3,85 USD/mes** |
+| KMS (clave propia, ya en producción) | 1 clave | 1,00 |
+| **Total aproximado** | | **≈ 4,85 USD/mes** |
 
-El componente dominante es Rekognition, lo que refuerza la línea de investigación:
-un clasificador propio, ligero y entrenado con imágenes locales reduciría ese costo
-además de mejorar la pertinencia de las categorías al contexto colombiano.
+El componente dominante es Rekognition: **el 62 % del costo operativo**. Esto refuerza
+la línea de investigación —un clasificador propio, ligero y ejecutado en el dispositivo,
+eliminaría ese renglón completo además de mejorar la pertinencia de las categorías al
+contexto colombiano.
 
 ---
 

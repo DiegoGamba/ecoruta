@@ -30,11 +30,19 @@ un secreto— y usa SRP, de modo que la contraseña nunca viaja.
 | Dato | En tránsito | En reposo |
 |---|---|---|
 | Peticiones a la API | TLS 1.2+ obligatorio | — |
-| Evidencias en S3 | TLS forzado por política de bucket (`aws:SecureTransport`) | SSE-KMS con clave propia y rotación anual |
-| Reportes en DynamoDB | TLS | SSE-KMS con la misma clave |
-| Logs en CloudWatch | — | Cifrados con KMS |
-| Mensajes en SNS/SQS | TLS | KMS |
+| Evidencias en S3 | TLS forzado por política de bucket (`aws:SecureTransport`) | SSE-KMS con clave propia, o AES256 de S3 |
+| Reportes en DynamoDB | TLS | SSE con clave propia o administrada por AWS |
+| Logs en CloudWatch | — | Cifrados |
+| Mensajes en SNS/SQS | TLS | KMS (clave propia o `alias/aws/*`) |
 | Credenciales en el dispositivo | — | Keychain (iOS) / Keystore (Android) vía Amplify |
+
+**Sobre la clave de cifrado.** Todo dato en reposo está cifrado en ambos modos de
+despliegue; lo que decide `use_customer_managed_key` es **quién custodia la clave**. Con
+una clave propia se obtienen política de clave, rotación anual auditable y revocación
+independiente de AWS —lo que corresponde en producción—; con las claves administradas por
+AWS se conserva el cifrado sin el cargo fijo de custodia, que es lo razonable en un
+ambiente de desarrollo o en un piloto académico. La justificación completa está en
+[ADR-009](05-decisiones-adr.md).
 
 ## 4.4 Validación de entrada
 
@@ -78,7 +86,7 @@ El pipeline de CI ejecuta en cada push y cada pull request:
 |---|---|---|
 | Análisis estático | `ruff` | Errores, imports muertos, antipatrones |
 | Seguridad de código | `bandit` | Uso inseguro de APIs, secretos embebidos, aleatoriedad débil |
-| Pruebas | `pytest` | 92 casos, incluidos los de validación y fuga de errores |
+| Pruebas | `pytest` | 112 casos, incluidos los de validación y fuga de errores |
 | Infraestructura | `terraform fmt -check` + `validate` | Deriva de formato y errores de configuración |
 
 ## 4.8 Deuda de seguridad reconocida

@@ -74,7 +74,31 @@ variable "api_rate_limit" {
   default     = 50
 }
 
+variable "use_customer_managed_key" {
+  description = <<-EOT
+    Clave KMS propia (CMK) para cifrar datos en reposo.
+
+    true  → control total: política de clave propia, rotación anual auditable y
+            revocación independiente de AWS. Cuesta 1 USD/mes por clave.
+    false → claves administradas por AWS (o cifrado propio de S3). El dato sigue
+            cifrado en reposo, sin costo fijo. Es la opción adecuada para el
+            piloto académico y para cualquier ambiente de desarrollo.
+
+    Recomendado: false en dev/qa, true en prod.
+  EOT
+  type        = bool
+  default     = false
+}
+
 locals {
   name    = "${var.project}-${var.stage}"
   is_prod = var.stage == "prod"
+
+  # ARN de la clave propia, o null cuando se usan las claves de AWS.
+  # Los recursos consultan este valor en vez de referenciar la clave directamente.
+  kms_arn = var.use_customer_managed_key ? aws_kms_key.main[0].arn : null
+
+  # Algoritmo de cifrado del bucket de evidencias. Debe coincidir con la
+  # cabecera que la app envía al subir la foto, así que viaja hasta el cliente.
+  evidence_sse = var.use_customer_managed_key ? "aws:kms" : "AES256"
 }

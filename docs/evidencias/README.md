@@ -12,5 +12,5 @@ Coloque aquí las capturas que respaldan el funcionamiento de la solución:
 | `06-cloudwatch.png` | Tablero operativo y alarmas |
 | `07-app-reporte.png` | Pantalla de reporte en el dispositivo |
 | `08-app-mapa.png` | Mapa con puntos críticos agrupados |
-| `09-pytest.png` | Ejecución de las 109 pruebas |
+| `09-pytest.png` | Ejecución de las 112 pruebas |
 | `10-alerta-sns.png` | Correo de alerta por residuo peligroso |

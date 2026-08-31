@@ -22,6 +22,7 @@ class Settings:
     presign_ttl_seconds: int
     cluster_radius_m: int
     cluster_min_reports: int
+    evidence_sse: str
     log_level: str
 
     @property
@@ -42,5 +43,9 @@ def get_settings() -> Settings:
         presign_ttl_seconds=int(os.environ.get("PRESIGN_TTL_SECONDS", 300)),
         cluster_radius_m=int(os.environ.get("CLUSTER_RADIUS_M", 120)),
         cluster_min_reports=int(os.environ.get("CLUSTER_MIN_REPORTS", 3)),
+        # Debe coincidir con el cifrado por defecto del bucket, que Terraform
+        # decide según `use_customer_managed_key`. "AES256" es el cifrado propio
+        # de S3 (sin costo); "aws:kms" usa la clave propia del proyecto.
+        evidence_sse=os.environ.get("EVIDENCE_SSE", "AES256"),
         log_level=os.environ.get("LOG_LEVEL", "INFO"),
     )

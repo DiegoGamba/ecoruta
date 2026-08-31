@@ -108,12 +108,16 @@ class ApiClient {
       body: {'content_type': contentType, 'size_bytes': size},
     ) as Map<String, dynamic>;
 
+    // Las cabeceras las dicta el servidor: forman parte de la firma y dependen
+    // de cómo esté cifrado el bucket en ese ambiente. La app no debe asumirlas.
+    final required = (data['required_headers'] as Map?)?.map(
+          (k, v) => MapEntry(k.toString(), v.toString()),
+        ) ??
+        {'Content-Type': contentType};
+
     final res = await _http.put(
       Uri.parse(data['upload_url'] as String),
-      headers: {
-        'Content-Type': contentType,
-        'x-amz-server-side-encryption': 'aws:kms',
-      },
+      headers: required,
       body: await file.readAsBytes(),
     ).timeout(const Duration(seconds: 60));
 

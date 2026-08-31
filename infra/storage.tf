@@ -20,10 +20,11 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "evidence" {
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm     = "aws:kms"
-      kms_master_key_id = aws_kms_key.main.arn
+      sse_algorithm = local.evidence_sse
+      # Con AES256 (cifrado propio de S3, sin costo) no se asocia clave.
+      kms_master_key_id = local.kms_arn
     }
-    bucket_key_enabled = true # reduce el costo de llamadas a KMS
+    bucket_key_enabled = var.use_customer_managed_key # reduce llamadas a KMS
   }
 }
 

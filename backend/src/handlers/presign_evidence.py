@@ -39,19 +39,49 @@ def handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
     today = datetime.now(UTC).strftime("%Y/%m/%d")
     key = f"evidencias/{today}/{pseudonymize(user_id)}/{uuid.uuid4()}.{ALLOWED_TYPES[content_type]}"
 
+    params = build_upload_params(settings.evidence_bucket, key, content_type, size,
+                                 settings.evidence_sse)
     url = get_s3().generate_presigned_url(
         "put_object",
-        Params={
-            "Bucket": settings.evidence_bucket,
-            "Key": key,
-            "ContentType": content_type,
-            "ContentLength": size,
-            "ServerSideEncryption": "aws:kms",
-        },
+        Params=params,
         ExpiresIn=settings.presign_ttl_seconds,
     )
     audit("presign_evidencia", user_id, key=key)
     return response(
         201,
-        {"upload_url": url, "evidence_key": key, "expires_in": settings.presign_ttl_seconds},
+        {
+            "upload_url": url,
+            "evidence_key": key,
+            "expires_in": settings.presign_ttl_seconds,
+            # El cliente debe reenviar estas cabeceras tal cual: la firma las
+            # incluye y S3 rechaza la subida si no coinciden. Se envían desde el
+            # servidor para que la app no tenga que conocer cómo está cifrado el
+            # bucket, que depende del ambiente.
+            "required_headers": required_headers(content_type, settings.evidence_sse),
+        },
     )
+
+
+def build_upload_params(bucket: str, key: str, content_type: str, size: int, sse: str) -> dict:
+    """Parámetros que se firman en la URL.
+
+    Con `AES256` no se firma cabecera de cifrado: el cifrado por defecto del
+    bucket se aplica solo. Firmarla obligaría al cliente a enviarla y sería un
+    punto más donde la subida puede fallar sin necesidad.
+    """
+    params = {
+        "Bucket": bucket,
+        "Key": key,
+        "ContentType": content_type,
+        "ContentLength": size,
+    }
+    if sse == "aws:kms":
+        params["ServerSideEncryption"] = "aws:kms"
+    return params
+
+
+def required_headers(content_type: str, sse: str) -> dict[str, str]:
+    headers = {"Content-Type": content_type}
+    if sse == "aws:kms":
+        headers["x-amz-server-side-encryption"] = "aws:kms"
+    return headers

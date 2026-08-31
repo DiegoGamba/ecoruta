@@ -7,8 +7,8 @@
 App móvil Flutter + arquitectura serverless en AWS
 
 [![CI](https://github.com/DiegoGamba/ecoruta/actions/workflows/ci.yml/badge.svg)](https://github.com/DiegoGamba/ecoruta/actions/workflows/ci.yml)
-![Pruebas](https://img.shields.io/badge/pruebas-109%20passed-2E7D5B)
-![Cobertura](https://img.shields.io/badge/cobertura-80%25-2E7D5B)
+![Pruebas](https://img.shields.io/badge/pruebas-112%20passed-2E7D5B)
+![Cobertura](https://img.shields.io/badge/cobertura-82%25-2E7D5B)
 ![Flutter](https://img.shields.io/badge/Flutter-3.22-02569B?logo=flutter)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
 ![Terraform](https://img.shields.io/badge/Terraform-1.6-7B42BC?logo=terraform&logoColor=white)
@@ -75,7 +75,7 @@ flowchart TB
 
     subgraph Datos["Persistencia"]
         DDB[("DynamoDB<br/>single-table · 3 GSI")]
-        S3[("S3<br/>evidencias · KMS")]
+        S3[("S3<br/>evidencias cifradas")]
     end
 
     subgraph Async["Asíncrono"]
@@ -100,8 +100,9 @@ flowchart TB
 ```
 
 **Por qué serverless.** El tráfico es muy irregular: picos tras jornadas de limpieza o
-lluvias, casi nulo de madrugada. Una arquitectura que escala a cero cuesta **menos de
-4 USD al mes** en el piloto, sin servidores que mantener. El razonamiento completo y las
+lluvias, casi nulo de madrugada. Una arquitectura que escala a cero permite **desplegar
+la demostración dentro de la capa gratuita de AWS** y operar una localidad completa por
+unos 5 USD al mes, sin servidores que mantener. El razonamiento completo y las
 alternativas descartadas están en los [ADR](docs/05-decisiones-adr.md).
 
 | Componente | Servicio | Por qué |
@@ -126,11 +127,11 @@ alternativas descartadas están en los [ADR](docs/05-decisiones-adr.md).
 - **Funciona sin conexión.** Los puntos críticos suelen estar donde peor llega la señal:
   si el envío falla, el reporte se persiste en el dispositivo y se reintenta solo.
 - **Privacidad por diseño.** Seudonimización en logs, `user_id` fuera de toda respuesta,
-  TTL de 540 días, cifrado KMS extremo a extremo. Una prueba verifica que un error
+  TTL de 540 días, cifrado en reposo extremo a extremo. Una prueba verifica que un error
   interno no filtre detalles al cliente.
 - **Mínimo privilegio real.** Ocho roles IAM, uno por función, con permisos declarados
   explícitamente en un mapa de Terraform.
-- **109 pruebas que corren sin AWS**, porque el dominio no conoce la nube.
+- **112 pruebas que corren sin AWS**, porque el dominio no conoce la nube.
 
 ## Estructura del repositorio
 
@@ -148,7 +149,7 @@ ecoruta/
 │   ├── src/
 │   │   ├── handlers/       8 Lambdas: adaptadores HTTP y de eventos
 │   │   └── common/         Dominio, servicios, repositorios, utilidades
-│   ├── tests/              109 pruebas (unitarias y de contrato)
+│   ├── tests/              112 pruebas (unitarias y de contrato)
 │   └── api.http            Peticiones listas para reproducir el flujo
 │
 ├── infra/                  Terraform: toda la infraestructura
@@ -160,7 +161,7 @@ ecoruta/
 │   ├── events.tf           EventBridge + SNS + DLQ
 │   └── monitoring.tf       Alarmas + tablero
 │
-├── docs/                   Documentación técnica (9 documentos)
+├── docs/                   Documentación técnica (10 documentos)
 │   └── evidencias/         Capturas del despliegue
 │
 ├── presentacion/           Presentación del proyecto (PDF)
@@ -170,6 +171,11 @@ ecoruta/
 ## Puesta en marcha
 
 Requisitos: AWS CLI configurado, Terraform ≥ 1.6, Python 3.12, Flutter ≥ 3.22.
+
+> **Costo.** Con los valores por defecto el despliegue de demostración cabe en la capa
+> gratuita de AWS: `use_customer_managed_key` viene en `false` para evitar el único cargo
+> fijo del diseño (1 USD/mes por clave KMS). `terraform destroy` lo elimina todo al
+> terminar. Detalle en [Costo de operación](docs/02-arquitectura.md#27-costo-de-operación).
 
 ```bash
 git clone https://github.com/DiegoGamba/ecoruta.git
@@ -215,8 +221,8 @@ cd backend && pytest --cov=src
 ```
 
 ```
-109 passed in 0.54s
-Cobertura total: 80 %  (dominio y servicios: 100 %)
+112 passed in 0.49s
+Cobertura total: 82 %  (dominio y servicios: 100 %)
 ```
 
 Las pruebas corren sin credenciales de AWS y sin red, porque la lógica de negocio se
@@ -237,6 +243,7 @@ de la estrategia, resultados del agrupamiento y limitaciones reconocidas en
 | [7 · Proyección investigativa](docs/07-proyeccion-investigativa.md) | Preguntas, metodología y productos esperados |
 | [8 · Despliegue](docs/08-despliegue.md) | Guía paso a paso y solución de problemas |
 | [9 · API](docs/09-api.md) | Referencia completa de los endpoints |
+| [10 · Guion de sustentación](docs/10-guion-sustentacion.md) | Qué decir en cada diapositiva y banco de preguntas |
 
 ## Presentación
 
