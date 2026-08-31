@@ -156,13 +156,13 @@ resource "aws_lambda_function" "fn" {
 
   environment {
     variables = {
-      TABLE_NAME      = aws_dynamodb_table.reports.name
-      EVIDENCE_BUCKET = aws_s3_bucket.evidence.bucket
-      EVENT_BUS       = aws_cloudwatch_event_bus.main.name
-      ALERT_TOPIC_ARN = aws_sns_topic.alerts.arn
-      STAGE           = var.stage
-      LOG_LEVEL       = local.is_prod ? "INFO" : "DEBUG"
-      CLUSTER_RADIUS_M = "120"
+      TABLE_NAME          = aws_dynamodb_table.reports.name
+      EVIDENCE_BUCKET     = aws_s3_bucket.evidence.bucket
+      EVENT_BUS           = aws_cloudwatch_event_bus.main.name
+      ALERT_TOPIC_ARN     = aws_sns_topic.alerts.arn
+      STAGE               = var.stage
+      LOG_LEVEL           = local.is_prod ? "INFO" : "DEBUG"
+      CLUSTER_RADIUS_M    = "120"
       CLUSTER_MIN_REPORTS = "3"
     }
   }

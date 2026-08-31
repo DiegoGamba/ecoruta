@@ -6,7 +6,8 @@ de Cognito y construcción de respuestas con cabeceras de seguridad.
 from __future__ import annotations
 
 import json
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from .logging_utils import get_logger, log, pseudonymize
 from .models import ValidationError

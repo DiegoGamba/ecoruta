@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from ..common.http import audit, handler_wrapper, parse_body, get_user_id, response
+from ..common.http import audit, get_user_id, handler_wrapper, parse_body, response
 from .deps import get_service
 
 

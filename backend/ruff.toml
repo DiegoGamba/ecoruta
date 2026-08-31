@@ -7,3 +7,6 @@ ignore = ["E501"]
 
 [lint.per-file-ignores]
 "tests/*" = ["ARG"]
+# El parametro `context` lo impone el contrato de invocacion de AWS Lambda:
+# la firma no puede omitirlo aunque el handler no lo use.
+"src/handlers/*" = ["ARG001"]

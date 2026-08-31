@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import math
 from collections import defaultdict
-from typing import Iterable, Sequence
+from collections.abc import Iterable, Sequence
 
 _BASE32 = "0123456789bcdefghjkmnpqrstuvwxyz"
 EARTH_RADIUS_M = 6_371_000.0

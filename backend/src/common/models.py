@@ -9,7 +9,7 @@ from __future__ import annotations
 import re
 import uuid
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from .geo import encode_geohash, validate_coordinates
@@ -128,7 +128,7 @@ def build_report(payload: dict[str, Any], user_id: str, now: datetime | None = N
         if ".." in evidence_key or evidence_key.startswith("/"):
             raise ValidationError("evidence_key inválida")
 
-    moment = now or datetime.now(timezone.utc)
+    moment = now or datetime.now(UTC)
     timestamp = moment.isoformat(timespec="seconds")
     expires = moment + timedelta(days=RETENTION_DAYS)
 

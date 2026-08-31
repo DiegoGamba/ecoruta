@@ -50,9 +50,9 @@ def map_labels_to_category(labels: list[dict]) -> tuple[str, list[str]]:
     Precedencia: `peligrosos` gana siempre porque define la ruta operativa y el
     protocolo de manejo; el resto se resuelve por confianza descendente.
     """
-    confident = [l for l in labels if float(l.get("Confidence", 0)) >= CONFIDENCE_THRESHOLD]
-    confident.sort(key=lambda l: float(l.get("Confidence", 0)), reverse=True)
-    names = [str(l.get("Name", "")) for l in confident]
+    confident = [lb for lb in labels if float(lb.get("Confidence", 0)) >= CONFIDENCE_THRESHOLD]
+    confident.sort(key=lambda lb: float(lb.get("Confidence", 0)), reverse=True)
+    names = [str(lb.get("Name", "")) for lb in confident]
 
     mapped = [
         LABEL_TO_CATEGORY[n.lower()] for n in names if n.lower() in LABEL_TO_CATEGORY

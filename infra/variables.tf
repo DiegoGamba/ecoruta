@@ -75,6 +75,6 @@ variable "api_rate_limit" {
 }
 
 locals {
-  name   = "${var.project}-${var.stage}"
+  name    = "${var.project}-${var.stage}"
   is_prod = var.stage == "prod"
 }

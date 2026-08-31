@@ -7,7 +7,7 @@ Esto evita el límite de 6 MB de payload de Lambda y reduce costo de tránsito.
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from ..common.config import get_settings
@@ -36,7 +36,7 @@ def handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
     if not 0 < size <= settings.max_evidence_bytes:
         raise ValidationError(f"la evidencia debe pesar entre 1 y {settings.max_evidence_bytes} bytes")
 
-    today = datetime.now(timezone.utc).strftime("%Y/%m/%d")
+    today = datetime.now(UTC).strftime("%Y/%m/%d")
     key = f"evidencias/{today}/{pseudonymize(user_id)}/{uuid.uuid4()}.{ALLOWED_TYPES[content_type]}"
 
     url = get_s3().generate_presigned_url(
