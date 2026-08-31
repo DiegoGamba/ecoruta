@@ -56,11 +56,4 @@ class AuthService {
     if (token.isEmpty) throw StateError('sesión sin token válido');
     return token;
   }
-
-  /// `true` si el usuario pertenece al grupo de operadores de aseo.
-  Future<bool> isOperator() async {
-    final session = await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
-    final groups = session.userPoolTokensResult.value.accessToken.groups;
-    return groups.contains('operadores');
-  }
 }

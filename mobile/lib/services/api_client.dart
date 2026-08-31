@@ -48,13 +48,13 @@ class ApiClient {
 
     late http.Response res;
     try {
-      res = await switch (method) {
+      final request = switch (method) {
         'GET' => _http.get(uri, headers: headers),
         'POST' => _http.post(uri, headers: headers, body: jsonEncode(body ?? {})),
         'PATCH' => _http.patch(uri, headers: headers, body: jsonEncode(body ?? {})),
         _ => throw ArgumentError('método no soportado: $method'),
-      }
-          .timeout(_timeout);
+      };
+      res = await request.timeout(_timeout);
     } on SocketException {
       throw ApiException(0, 'Sin conexión. El reporte se guardó para enviarlo luego.');
     }

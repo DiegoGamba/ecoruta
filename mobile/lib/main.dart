@@ -69,7 +69,6 @@ class _EcoRutaAppState extends State<EcoRutaApp> {
           }
           return HomeShell(
             api: _api,
-            auth: _auth,
             location: _location,
             queue: _queue,
           );

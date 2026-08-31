@@ -31,12 +31,12 @@ resource "aws_apigatewayv2_authorizer" "cognito" {
 
 locals {
   routes = {
-    "POST /reportes"                = "create_report"
-    "GET /reportes/{id}"            = "get_report"
-    "PATCH /reportes/{id}/estado"   = "update_status"
-    "GET /puntos-criticos"          = "hotspots"
-    "GET /indicadores"              = "indicators"
-    "POST /evidencias/url"          = "presign_evidence"
+    "POST /reportes"              = "create_report"
+    "GET /reportes/{id}"          = "get_report"
+    "PATCH /reportes/{id}/estado" = "update_status"
+    "GET /puntos-criticos"        = "hotspots"
+    "GET /indicadores"            = "indicators"
+    "POST /evidencias/url"        = "presign_evidence"
   }
 }
 

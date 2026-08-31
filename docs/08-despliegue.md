@@ -165,8 +165,19 @@ El flujo de trabajo [`ci.yml`](../.github/workflows/ci.yml) ejecuta pruebas, lin
 análisis de seguridad y validación de Terraform en cada push y pull request.
 [`deploy.yml`](../.github/workflows/deploy.yml) aplica la infraestructura al fusionar en
 `main`, autenticándose contra AWS por **OIDC** —sin llaves de acceso guardadas en GitHub—.
-Requiere configurar en el repositorio la variable `AWS_ROLE_ARN` y el rol de confianza
-correspondiente en IAM.
+
+El job está condicionado a `vars.AWS_ROLE_ARN != ''`: mientras no se configure, se omite
+en vez de fallar, de modo que quien clone el repositorio no hereda un pipeline roto. Para
+activarlo, en *Settings → Secrets and variables → Actions → Variables* defina:
+
+| Variable | Ejemplo | Para qué |
+|---|---|---|
+| `AWS_ROLE_ARN` | `arn:aws:iam::123456789012:role/github-ecoruta` | Rol que GitHub asume por OIDC |
+| `AWS_REGION` | `us-east-1` | Región del despliegue |
+| `TF_STATE_BUCKET` | `ecoruta-tfstate-123456789012` | Bucket del estado remoto (§8.2) |
+
+Además hay que crear en IAM el proveedor de identidad OIDC de GitHub y el rol con una
+política de confianza que limite el acceso a este repositorio.
 
 ## 8.9 Destruir el entorno
 

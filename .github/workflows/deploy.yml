@@ -19,7 +19,12 @@ jobs:
   deploy:
     name: Aplicar infraestructura (dev)
     runs-on: ubuntu-latest
-    environment: dev
+    # El despliegue solo corre en repositorios que ya tienen configurado el rol
+    # de AWS. Sin esa variable el job se omite en vez de fallar: quien clone
+    # este repositorio no hereda un pipeline roto.
+    # Para activarlo: Settings → Secrets and variables → Actions → Variables,
+    # y defina AWS_ROLE_ARN, AWS_REGION y TF_STATE_BUCKET.
+    if: vars.AWS_ROLE_ARN != ''
     defaults:
       run:
         working-directory: infra

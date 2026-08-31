@@ -35,7 +35,7 @@ output "dashboard_url" {
 
 output "mobile_env" {
   description = "Bloque listo para pegar en mobile/.env"
-  value = <<-EOT
+  value       = <<-EOT
     API_BASE_URL=${aws_apigatewayv2_stage.main.invoke_url}
     COGNITO_USER_POOL_ID=${aws_cognito_user_pool.main.id}
     COGNITO_CLIENT_ID=${aws_cognito_user_pool_client.mobile.id}

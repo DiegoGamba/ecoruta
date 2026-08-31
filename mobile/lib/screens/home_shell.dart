@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../services/api_client.dart';
-import '../services/auth_service.dart';
 import '../services/location_service.dart';
 import '../services/offline_queue.dart';
 import 'map_screen.dart';
@@ -13,13 +12,11 @@ class HomeShell extends StatefulWidget {
   const HomeShell({
     super.key,
     required this.api,
-    required this.auth,
     required this.location,
     required this.queue,
   });
 
   final ApiClient api;
-  final AuthService auth;
   final LocationService location;
   final OfflineQueue queue;
 

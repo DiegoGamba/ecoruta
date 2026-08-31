@@ -75,7 +75,7 @@ El radio solicitado se acota en el servidor entre 30 y 1000 m: un cliente que pi
 | `bandit -r src/` | Sin hallazgos de severidad media o alta |
 | `terraform fmt -check` | Formato conforme |
 | `terraform validate` | Configuración válida |
-| `flutter analyze` | Sin advertencias con `flutter_lints` |
+| `flutter analyze --no-fatal-infos` | Sin errores ni advertencias |
 
 ## 6.5 Evidencias
 

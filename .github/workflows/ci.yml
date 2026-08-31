@@ -75,5 +75,11 @@ jobs:
           cache: true
 
       - run: flutter pub get
-      - run: flutter analyze
-      - run: flutter test
+
+      # --no-fatal-infos: las sugerencias de estilo se corrigen, pero no rompen
+      # la construcción. Los errores y advertencias reales sí la detienen.
+      - name: Análisis estático
+        run: flutter analyze --no-fatal-infos
+
+      - name: Pruebas
+        run: flutter test

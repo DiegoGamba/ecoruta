@@ -121,7 +121,7 @@ class _HotspotMarker extends StatelessWidget {
           '${hotspot.reportCount} reportes · ${hotspot.dominantCategory.label} · prioridad ${hotspot.priority}',
       child: Container(
         decoration: BoxDecoration(
-          color: _color.withValues(alpha: 0.85),
+          color: _color.withOpacity(0.85),
           shape: BoxShape.circle,
           border: Border.all(color: Colors.white, width: 2),
         ),
