@@ -139,8 +139,10 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
               onChanged: (v) => setState(() => _category = v ?? _category),
             ),
             const SizedBox(height: 20),
-            Text('Severidad: ${_severity.round()}',
-                style: Theme.of(context).textTheme.labelLarge),
+            Text(
+              'Severidad: ${_severity.round()}',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
             Slider(
               value: _severity,
               min: 1,

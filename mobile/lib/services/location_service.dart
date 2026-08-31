@@ -25,11 +25,10 @@ class LocationService {
       );
     }
 
+    // `locationSettings` llego en geolocator 13; este proyecto fija la 12.
     return Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(
-        accuracy: LocationAccuracy.high,
-        timeLimit: Duration(seconds: 15),
-      ),
+      desiredAccuracy: LocationAccuracy.high,
+      timeLimit: const Duration(seconds: 15),
     );
   }
 }
