@@ -1,0 +1,42 @@
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+!terraform.tfvars.example
+.terraform/
+.terraform.lock.hcl
+tfplan
+infra/.build/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Flutter / Dart
+mobile/.dart_tool/
+mobile/build/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/ios/Pods/
+mobile/android/.gradle/
+mobile/android/local.properties
+*.iml
+
+# Configuración y secretos
+.env
+*.env
+!*.env.example
+amplifyconfiguration.dart
+*.jks
+*.keystore
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -1,0 +1,48 @@
+### Flujo completo contra el despliegue propio.
+### Reemplace @baseUrl por `terraform output -raw api_base_url`
+### y @token por un access token válido de Cognito.
+
+@baseUrl = https://xxxxxx.execute-api.us-east-1.amazonaws.com/dev
+@token = PEGUE_AQUI_EL_ACCESS_TOKEN
+
+### 1. Pedir URL prefirmada para la evidencia
+POST {{baseUrl}}/evidencias/url
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "content_type": "image/jpeg", "size_bytes": 384210 }
+
+### 2. Crear el reporte (use la evidence_key del paso anterior)
+POST {{baseUrl}}/reportes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "lat": 4.710989,
+  "lon": -74.072092,
+  "category": "escombros",
+  "severity": 4,
+  "description": "acumulacion en el anden frente al parque"
+}
+
+### 3. Consultar el detalle
+GET {{baseUrl}}/reportes/REEMPLACE_REPORT_ID
+Authorization: Bearer {{token}}
+
+### 4. Puntos críticos de la zona
+GET {{baseUrl}}/puntos-criticos?lat=4.710989&lon=-74.072092&radius_m=120&min_reports=3
+Authorization: Bearer {{token}}
+
+### 5. Avanzar el estado (requiere grupo `operadores`)
+PATCH {{baseUrl}}/reportes/REEMPLACE_REPORT_ID/estado
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "status": "verificado" }
+
+### 6. Indicadores (requiere grupo `operadores`)
+GET {{baseUrl}}/indicadores
+Authorization: Bearer {{token}}
+
+### 7. Sin token: debe responder 401
+GET {{baseUrl}}/puntos-criticos?lat=4.71&lon=-74.07
