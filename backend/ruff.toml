@@ -3,7 +3,10 @@ target-version = "py312"
 
 [lint]
 select = ["E", "F", "I", "B", "UP", "SIM", "C4", "ARG", "RET"]
-ignore = ["E501"]
+# UP017 sugiere `datetime.UTC`, que solo existe desde Python 3.11. El runtime de
+# Lambda es 3.12, pero la demostración local debe correr con el Python que traiga
+# la máquina de quien evalúe el proyecto — `timezone.utc` funciona en todas.
+ignore = ["E501", "UP017"]
 
 [lint.per-file-ignores]
 "tests/*" = ["ARG"]

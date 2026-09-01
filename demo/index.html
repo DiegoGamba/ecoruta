@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EcoRuta · Demostración local</title>
+<link rel="stylesheet" href="vendor/leaflet.css">
+<style>
+  :root {
+    --forest: #2C5F2D;
+    --deep:   #1A3A1B;
+    --moss:   #97BC62;
+    --cream:  #F5F5F0;
+    --ink:    #1C2620;
+    --muted:  #6B7A70;
+    --line:   #DCE3DA;
+    --alta:   #B3261E;
+    --media:  #E65100;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; height: 100vh; display: flex;
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink); background: var(--cream);
+  }
+  #panel {
+    width: 380px; flex-shrink: 0; background: #fff; overflow-y: auto;
+    border-right: 1px solid var(--line); display: flex; flex-direction: column;
+  }
+  header { background: var(--deep); color: #fff; padding: 18px 20px; }
+  header h1 { margin: 0; font-size: 20px; letter-spacing: -.2px; }
+  header p  { margin: 4px 0 0; font-size: 12px; color: var(--moss); }
+  .seccion { padding: 16px 20px; border-bottom: 1px solid var(--line); }
+  .seccion h2 {
+    margin: 0 0 12px; font-size: 11px; letter-spacing: 1.4px;
+    text-transform: uppercase; color: var(--moss); font-weight: 700;
+  }
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .kpi {
+    background: var(--cream); border: 1px solid var(--line);
+    border-radius: 10px; padding: 10px 12px;
+  }
+  .kpi b { display: block; font-size: 22px; color: var(--forest); line-height: 1.1; }
+  .kpi span { font-size: 10.5px; color: var(--muted); }
+  label { display: block; font-size: 12px; font-weight: 600; margin: 10px 0 4px; }
+  select, input[type=range], button {
+    width: 100%; font: inherit; border-radius: 8px;
+  }
+  select {
+    padding: 8px; border: 1px solid var(--line); background: #fff; color: var(--ink);
+  }
+  button {
+    padding: 11px; border: 0; background: var(--forest); color: #fff;
+    font-weight: 600; cursor: pointer; margin-top: 12px;
+  }
+  button:hover { background: var(--deep); }
+  button:disabled { background: var(--muted); cursor: not-allowed; }
+  .pista {
+    font-size: 12px; color: var(--muted); background: var(--cream);
+    border-left: 3px solid var(--moss); padding: 9px 11px; border-radius: 0 8px 8px 0;
+  }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li {
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 10px 12px; margin-bottom: 8px; cursor: pointer; background: #fff;
+  }
+  li:hover { border-color: var(--moss); }
+  li .fila { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  li b { font-size: 13px; }
+  li small { color: var(--muted); font-size: 11.5px; }
+  .etiqueta {
+    font-size: 10px; font-weight: 700; padding: 2px 7px;
+    border-radius: 99px; color: #fff; white-space: nowrap;
+  }
+  .Alta  { background: var(--alta); }
+  .Media { background: var(--media); }
+  .Baja  { background: var(--forest); }
+  /* Los mosaicos vienen de OpenStreetMap y necesitan conexión.
+     Sin ella, este fondo evita que el mapa se vea roto: los puntos
+     críticos se siguen dibujando. */
+  #mapa { flex: 1; background: #E9EDE6; }
+  .marcador {
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; border-radius: 50%;
+    border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.4);
+  }
+  .aviso {
+    font-size: 11.5px; color: var(--muted); padding: 12px 20px; line-height: 1.45;
+  }
+  .destello { animation: destello 1.2s ease-out; }
+  @keyframes destello { from { background: #E8F3DC; } to { background: #fff; } }
+</style>
+</head>
+<body>
+
+<div id="panel">
+  <header>
+    <h1>EcoRuta</h1>
+    <p>Demostración local · handlers reales, sin AWS</p>
+  </header>
+
+  <div class="seccion">
+    <h2>Indicadores operativos</h2>
+    <div class="kpis">
+      <div class="kpi"><b id="k-total">–</b><span>Reportes</span></div>
+      <div class="kpi"><b id="k-pend">–</b><span>Pendientes</span></div>
+      <div class="kpi"><b id="k-tasa">–</b><span>Tasa atención</span></div>
+    </div>
+  </div>
+
+  <div class="seccion">
+    <h2>Reportar un punto</h2>
+    <p class="pista" id="pista">Haga clic en el mapa para fijar la ubicación del reporte.</p>
+    <label for="categoria">Tipo de residuo</label>
+    <select id="categoria">
+      <option value="escombros">Escombros</option>
+      <option value="organicos">Orgánicos</option>
+      <option value="reciclables">Reciclables</option>
+      <option value="voluminosos">Voluminosos</option>
+      <option value="peligrosos">Peligrosos</option>
+    </select>
+    <label for="severidad">Severidad: <span id="sev-valor">3</span></label>
+    <input type="range" id="severidad" min="1" max="5" value="3">
+    <button id="enviar" disabled>Enviar reporte</button>
+  </div>
+
+  <div class="seccion">
+    <h2>Puntos críticos detectados</h2>
+    <ul id="lista"></ul>
+  </div>
+
+  <p class="aviso">
+    El agrupamiento, la validación y los indicadores los calcula el mismo código
+    Python que se despliega en AWS Lambda. Lo único sustituido es DynamoDB, por el
+    repositorio en memoria que usan las pruebas.
+  </p>
+</div>
+
+<div id="mapa"></div>
+
+<script src="vendor/leaflet.js"></script>
+<script>
+const CENTRO = [4.6650, -74.0930];
+const mapa = L.map('mapa').setView(CENTRO, 12);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap', maxZoom: 19,
+}).addTo(mapa);
+
+const capaPuntos = L.layerGroup().addTo(mapa);
+let marcadorNuevo = null;
+let seleccion = null;
+
+const colorPrioridad = p => p === 'Alta' ? '#B3261E' : p === 'Media' ? '#E65100' : '#2C5F2D';
+const ETIQUETAS = {
+  escombros: 'Escombros', organicos: 'Orgánicos', reciclables: 'Reciclables',
+  voluminosos: 'Voluminosos', peligrosos: 'Peligrosos', no_clasificado: 'Sin clasificar',
+};
+const nombre = c => ETIQUETAS[c] || c;
+const prioridad = s => s >= 15 ? 'Alta' : s >= 8 ? 'Media' : 'Baja';
+
+// La API acota el radio a 1000 m, así que se barre la ciudad por celdas y se
+// unen los resultados: es exactamente lo que haría un panel de operación real.
+const REJILLA = [];
+for (let dy = -4; dy <= 5; dy++) {
+  for (let dx = -5; dx <= 5; dx++) {
+    REJILLA.push([CENTRO[0] + dy * 0.018, CENTRO[1] + dx * 0.018]);
+  }
+}
+
+async function cargarPuntos() {
+  const vistos = new Set();
+  const puntos = [];
+
+  const respuestas = await Promise.all(REJILLA.map(([lat, lon]) =>
+    // La API manda Cache-Control a propósito (60 s en puntos críticos, 120 s en
+    // indicadores). En la demostración queremos ver el efecto inmediato de cada
+    // reporte, así que se evita la caché del navegador con un parámetro único.
+    fetch(`/puntos-criticos?lat=${lat}&lon=${lon}&radius_m=120&min_reports=3&_=${Date.now()}`)
+      .then(r => r.json()).catch(() => ({ hotspots: [] }))
+  ));
+
+  for (const r of respuestas) {
+    for (const h of (r.hotspots || [])) {
+      const clave = h.report_ids.slice().sort().join('|');
+      if (vistos.has(clave)) continue;
+      vistos.add(clave);
+      puntos.push(h);
+    }
+  }
+  puntos.sort((a, b) => b.severity_score - a.severity_score);
+  pintar(puntos);
+}
+
+function pintar(puntos) {
+  capaPuntos.clearLayers();
+  const lista = document.getElementById('lista');
+  lista.innerHTML = '';
+
+  if (!puntos.length) {
+    lista.innerHTML = '<li><small>Ningún grupo alcanza el umbral de 3 reportes.</small></li>';
+    return;
+  }
+
+  puntos.forEach((h, i) => {
+    const p = prioridad(h.severity_score);
+    const d = Math.min(52, 26 + h.report_count * 3);
+
+    const marcador = L.marker([h.centroid.lat, h.centroid.lon], {
+      icon: L.divIcon({
+        className: '',
+        html: `<div class="marcador" style="width:${d}px;height:${d}px;background:${colorPrioridad(p)};font-size:${d/2.6}px">${h.report_count}</div>`,
+        iconSize: [d, d], iconAnchor: [d/2, d/2],
+      }),
+    }).bindPopup(
+      `<b>${nombre(h.dominant_category)}</b><br>${h.report_count} reportes · severidad ${h.severity_score}<br>Prioridad ${p}<br><small>geohash ${h.geohash}</small>`
+    );
+    capaPuntos.addLayer(marcador);
+    L.circle([h.centroid.lat, h.centroid.lon], {
+      radius: 120, color: colorPrioridad(p), weight: 1, fillOpacity: 0.07,
+    }).addTo(capaPuntos);
+
+    const li = document.createElement('li');
+    li.innerHTML =
+      `<div class="fila"><b>${nombre(h.dominant_category)}</b><span class="etiqueta ${p}">${p}</span></div>` +
+      `<small>${h.report_count} reportes · severidad acumulada ${h.severity_score}</small>`;
+    li.onclick = () => { mapa.setView([h.centroid.lat, h.centroid.lon], 17); marcador.openPopup(); };
+    if (i === 0) li.classList.add('destello');
+    lista.appendChild(li);
+  });
+}
+
+async function cargarIndicadores() {
+  const r = await fetch(`/indicadores?operador=1&_=${Date.now()}`);
+  const k = await r.json();
+  document.getElementById('k-total').textContent = k.total_reportes;
+  document.getElementById('k-pend').textContent = k.pendientes;
+  document.getElementById('k-tasa').textContent = Math.round(k.tasa_atencion * 100) + '%';
+}
+
+mapa.on('click', e => {
+  seleccion = e.latlng;
+  if (marcadorNuevo) mapa.removeLayer(marcadorNuevo);
+  marcadorNuevo = L.marker(seleccion).addTo(mapa);
+  document.getElementById('enviar').disabled = false;
+  document.getElementById('pista').textContent =
+    `Ubicación fijada: ${seleccion.lat.toFixed(5)}, ${seleccion.lng.toFixed(5)}`;
+});
+
+document.getElementById('severidad').oninput = e =>
+  document.getElementById('sev-valor').textContent = e.target.value;
+
+document.getElementById('enviar').onclick = async () => {
+  if (!seleccion) return;
+  const boton = document.getElementById('enviar');
+  boton.disabled = true; boton.textContent = 'Enviando…';
+
+  const res = await fetch('/reportes', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      lat: seleccion.lat,
+      lon: seleccion.lng,
+      category: document.getElementById('categoria').value,
+      severity: Number(document.getElementById('severidad').value),
+      description: 'Reporte creado desde la demostración',
+    }),
+  });
+
+  const cuerpo = await res.json();
+  document.getElementById('pista').textContent = res.ok
+    ? `Reporte creado · geohash ${cuerpo.geohash}`
+    : `Rechazado por el servidor: ${cuerpo.error}`;
+
+  if (marcadorNuevo) { mapa.removeLayer(marcadorNuevo); marcadorNuevo = null; }
+  seleccion = null;
+  boton.textContent = 'Enviar reporte';
+  await Promise.all([cargarPuntos(), cargarIndicadores()]);
+};
+
+cargarPuntos();
+cargarIndicadores();
+</script>
+</body>
+</html>

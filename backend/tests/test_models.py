@@ -1,4 +1,4 @@
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 
 import pytest
 
@@ -9,7 +9,7 @@ from src.common.models import (
 )
 
 USER = "abc123def456"
-NOW = datetime(2026, 8, 31, 12, 0, tzinfo=UTC)
+NOW = datetime(2026, 8, 31, 12, 0, tzinfo=timezone.utc)
 
 
 def payload(**over):

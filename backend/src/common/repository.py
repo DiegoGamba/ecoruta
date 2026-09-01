@@ -6,7 +6,7 @@ memoria, y (2) cambiar el motor de persistencia sin tocar los handlers.
 from __future__ import annotations
 
 from collections.abc import Iterable
-from datetime import UTC
+from datetime import timezone
 from decimal import Decimal
 from typing import Any, Protocol
 
@@ -67,7 +67,7 @@ class DynamoReportRepository:
     def update_status(self, report_id: str, target: str, actor: str) -> dict:
         from datetime import datetime
 
-        now = datetime.now(UTC).isoformat(timespec="seconds")
+        now = datetime.now(timezone.utc).isoformat(timespec="seconds")
         result = self._table.update_item(
             Key={"PK": f"REPORT#{report_id}", "SK": "METADATA"},
             UpdateExpression=(

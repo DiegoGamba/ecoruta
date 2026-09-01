@@ -133,6 +133,27 @@ alternativas descartadas están en los [ADR](docs/05-decisiones-adr.md).
   explícitamente en un mapa de Terraform.
 - **112 pruebas que corren sin AWS**, porque el dominio no conoce la nube.
 
+## Probarlo en 30 segundos
+
+Sin cuenta de AWS, sin credenciales y sin instalar nada — solo Python 3.12:
+
+```bash
+git clone https://github.com/DiegoGamba/ecoruta.git
+cd ecoruta
+python3 demo/local_server.py     # abrir http://localhost:8000
+```
+
+![Demostración local](docs/evidencias/01-demo-panel-inicial.png)
+
+Arranca con 37 reportes sembrados en Bogotá y muestra los cinco puntos críticos que el
+algoritmo detecta. Envíe tres reportes en un mismo lugar y verá aparecer un sexto: es el
+umbral de tres reportes funcionando.
+
+La demostración ejecuta **los handlers reales de las Lambdas** —la misma validación, el
+mismo geohash, el mismo agrupamiento—; lo único sustituido es DynamoDB, por el
+repositorio en memoria que usan las 112 pruebas. El detalle de qué es real y qué está
+sustituido está en [`demo/README.md`](demo/README.md).
+
 ## Estructura del repositorio
 
 ```
@@ -161,8 +182,12 @@ ecoruta/
 │   ├── events.tf           EventBridge + SNS + DLQ
 │   └── monitoring.tf       Alarmas + tablero
 │
-├── docs/                   Documentación técnica (10 documentos)
-│   └── evidencias/         Capturas del despliegue
+├── demo/                   Demostración local ejecutable, sin AWS
+│   ├── local_server.py     Handlers reales + repositorio en memoria
+│   └── index.html          Mapa interactivo de puntos críticos
+│
+├── docs/                   Documentación técnica (11 documentos)
+│   └── evidencias/         Capturas y salida de las pruebas
 │
 ├── presentacion/           Presentación del proyecto (PDF)
 └── .github/workflows/      CI y despliegue continuo
@@ -244,6 +269,7 @@ de la estrategia, resultados del agrupamiento y limitaciones reconocidas en
 | [8 · Despliegue](docs/08-despliegue.md) | Guía paso a paso y solución de problemas |
 | [9 · API](docs/09-api.md) | Referencia completa de los endpoints |
 | [10 · Guion de sustentación](docs/10-guion-sustentacion.md) | Qué decir en cada diapositiva y banco de preguntas |
+| [11 · Guion de video](docs/11-guion-video.md) | Guion cerrado para grabar la sustentación |
 
 ## Presentación
 
