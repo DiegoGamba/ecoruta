@@ -5,21 +5,15 @@
 Cumple los requisitos del taller: retrato del estudiante, título del proyecto, temas
 principales y herramientas utilizadas, todo legible a tamaño reducido.
 
-## Falta incrustar el retrato
+## Cómo se genera
 
-La miniatura tiene un marcador circular en la mitad izquierda. Para reemplazarlo:
+`miniatura.html` es la fuente; `avatar-1.jpg` y `avatar-2.jpg` son los retratos ya
+recortados en cuadrado. Para regenerar la imagen tras un cambio, abra el HTML en el
+navegador con la ventana en 1280 × 720 y capture la pantalla.
 
-1. Guarde su foto o avatar como `avatar.png` en esta carpeta (recórtela cuadrada).
-2. En `miniatura.html`, sustituya el bloque `<div class="marcador">…</div>` por:
-
-   ```html
-   <img src="avatar.png" alt="Diego Gamba">
-   ```
-
-3. Vuelva a generar la imagen: abra `miniatura.html` en el navegador, ajuste la ventana a
-   1280 × 720 y capture; o pídale a quien tenga la herramienta que la re-renderice.
-
-El instructivo admite un avatar en estilo caricatura o anime generado a partir de la foto.
+Para cambiar un retrato, reemplace el `.jpg` correspondiente por otro recorte cuadrado y
+vuelva a capturar. El instructivo también admite un avatar en estilo caricatura o anime
+generado a partir de la foto.
 
 ## Contenido de la miniatura
 
@@ -29,4 +23,5 @@ El instructivo admite un avatar en estilo caricatura o anime generado a partir d
 | Bajada | App móvil para el reporte y la priorización de puntos críticos de residuos sólidos |
 | Temas | Arquitectura Cloud · Apps multiplataforma · Geolocalización |
 | Herramientas | Flutter · AWS Lambda · DynamoDB · Terraform · Python |
-| Autor | Diego Gamba — Diseño de Aplicaciones Móviles |
+| Integrantes | Diego Gamba · Mariana Diez |
+| Curso | Diseño de Aplicaciones Móviles |

@@ -21,7 +21,7 @@ const BODY = "Calibri";
 
 const pres = new pptxgen();
 pres.layout = "LAYOUT_WIDE"; // 13.3 x 7.5
-pres.author = "Diego Gamba";
+pres.author = "Diego Gamba, Mariana Diez";
 pres.title = "EcoRuta";
 
 const W = 13.3;
@@ -143,11 +143,11 @@ function footer(s, n) {
   s.addShape(pres.ShapeType.rect, {
     x: M, y: 5.35, w: 2.2, h: 0.03, fill: { color: C.moss }, line: { color: C.moss },
   });
-  s.addText("Diego Gamba", {
+  s.addText("Diego Gamba  ·  Mariana Diez", {
     x: M, y: 5.6, w: 8, h: 0.32,
     fontFace: BODY, fontSize: 15, bold: true, color: C.white, isTextBox: true, margin: 0,
   });
-  s.addText("Diseño de Aplicaciones Móviles · Facultad de Ingeniería, Ciencias y Administración", {
+  s.addText("Diseño de Aplicaciones Móviles · Facultad de Ingeniería y Ciencias Ambientales", {
     x: M, y: 5.95, w: 9, h: 0.32,
     fontFace: BODY, fontSize: 11, color: C.moss, isTextBox: true, margin: 0,
   });
@@ -880,7 +880,7 @@ function footer(s, n) {
     });
   });
 
-  s.addText("Diego Gamba  ·  github.com/DiegoGamba/ecoruta", {
+  s.addText("Diego Gamba · Mariana Diez  ·  github.com/DiegoGamba/ecoruta", {
     x: M, y: 6.35, w: 9, h: 0.32,
     fontFace: BODY, fontSize: 12, color: C.moss, isTextBox: true, margin: 0,
   });

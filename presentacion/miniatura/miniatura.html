@@ -17,19 +17,18 @@
   .b2 { width: 420px; height: 420px; right: 60px;   bottom: -190px; background: #97BC62; opacity: .16; }
   .b3 { width: 300px; height: 300px; left: -110px;  bottom: -120px; background: #2C5F2D; opacity: .5; }
 
-  .lienzo { position: relative; display: flex; height: 100%; align-items: center; padding: 0 60px; gap: 52px; }
+  .lienzo { position: relative; display: flex; height: 100%; align-items: center; padding: 0 54px; gap: 40px; }
 
-  /* ---- Retrato del estudiante (mitad izquierda) ---- */
+  /* ---- Retratos de los integrantes (mitad izquierda) ---- */
+  .retratos { position: relative; width: 396px; height: 400px; flex-shrink: 0; }
   .retrato {
-    width: 348px; height: 348px; flex-shrink: 0; border-radius: 50%;
-    border: 8px solid #97BC62; overflow: hidden;
-    background: #1F4419; display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 18px 50px rgba(0,0,0,.45);
+    position: absolute; width: 244px; height: 244px; border-radius: 50%;
+    border: 7px solid #97BC62; overflow: hidden; background: #1F4419;
+    box-shadow: 0 16px 44px rgba(0,0,0,.5);
   }
   .retrato img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .marcador { text-align: center; color: #97BC62; padding: 0 26px; }
-  .marcador .icono { font-size: 74px; line-height: 1; }
-  .marcador .texto { font-size: 21px; font-weight: 700; margin-top: 14px; line-height: 1.35; }
+  .r1 { left: 0;    top: 6px; }
+  .r2 { right: 0; bottom: 6px; border-color: #DCEBC8; }
 
   /* ---- Texto (mitad derecha) ---- */
   .contenido { flex: 1; min-width: 0; }
@@ -38,11 +37,11 @@
     color: #97BC62; margin-bottom: 10px;
   }
   h1 {
-    font-size: 104px; font-weight: 800; color: #fff; line-height: .95;
+    font-size: 96px; font-weight: 800; color: #fff; line-height: .95;
     letter-spacing: -2px; margin-bottom: 12px;
   }
   .bajada {
-    font-size: 27px; font-weight: 600; color: #E6F0DA; line-height: 1.25;
+    font-size: 25px; font-weight: 600; color: #E6F0DA; line-height: 1.25;
     margin-bottom: 26px;
   }
   .rotulo {
@@ -51,16 +50,16 @@
   }
   .fichas { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 22px; }
   .ficha {
-    font-size: 24px; font-weight: 700; color: #14300F; background: #97BC62;
-    padding: 7px 17px; border-radius: 999px; white-space: nowrap;
+    font-size: 22px; font-weight: 700; color: #14300F; background: #97BC62;
+    padding: 6px 15px; border-radius: 999px; white-space: nowrap;
   }
   .ficha.hueca { background: transparent; color: #DCEBC8; border: 2.5px solid #5E8A46; }
   .pie {
     display: flex; align-items: baseline; gap: 16px;
     border-top: 2px solid #3C6B33; padding-top: 16px;
   }
-  .pie .nombre { font-size: 30px; font-weight: 800; color: #fff; }
-  .pie .curso  { font-size: 21px; font-weight: 600; color: #97BC62; }
+  .pie .nombre { font-size: 29px; font-weight: 800; color: #fff; }
+  .curso-linea { font-size: 21px; font-weight: 600; color: #97BC62; margin-top: 4px; }
 </style>
 </head>
 <body>
@@ -69,12 +68,9 @@
   <div class="blob b3"></div>
 
   <div class="lienzo">
-    <div class="retrato">
-      <!-- Reemplace este bloque por: <img src="avatar.png" alt="Diego Gamba"> -->
-      <div class="marcador">
-        <div class="icono">👤</div>
-        <div class="texto">FOTO O AVATAR<br>DEL ESTUDIANTE</div>
-      </div>
+    <div class="retratos">
+      <div class="retrato r1"><img src="avatar-1.jpg" alt="Mariana Diez"></div>
+      <div class="retrato r2"><img src="avatar-2.jpg" alt="Diego Gamba"></div>
     </div>
 
     <div class="contenido">
@@ -99,9 +95,9 @@
       </div>
 
       <div class="pie">
-        <span class="nombre">Diego Gamba</span>
-        <span class="curso">Diseño de Aplicaciones Móviles</span>
+        <span class="nombre">Diego Gamba · Mariana Diez</span>
       </div>
+      <div class="curso-linea">Diseño de Aplicaciones Móviles</div>
     </div>
   </div>
 </body>

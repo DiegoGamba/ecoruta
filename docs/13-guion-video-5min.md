@@ -48,7 +48,7 @@ Haga una prueba de 20 segundos y escúchela antes de grabar en serio.
 
 *(Diapositiva 1, luego 2)*
 
-> Soy Diego Gamba y presento **EcoRuta**: una aplicación móvil multiplataforma en Flutter,
+> Somos Diego Gamba y Mariana Diez, y presentamos **EcoRuta**: una aplicación móvil multiplataforma en Flutter,
 > respaldada por una arquitectura serverless en AWS, para el reporte ciudadano y la
 > priorización automática de puntos críticos de residuos sólidos.
 >
@@ -196,6 +196,7 @@ muestre capturas.**
 - [ ] Miniatura personalizada cargada (`presentacion/miniatura/miniatura-youtube.png`,
       con su foto o avatar ya incrustado)
 - [ ] Título del video: *EcoRuta — Sustentación técnica · Diseño de Aplicaciones Móviles*
+- [ ] Si exponen los dos, repártanse los bloques: uno toma 1 y 2, el otro 3 y 4, y cierran juntos
 - [ ] En la descripción: el enlace al repositorio
 - [ ] Entregue el **enlace de YouTube** en el buzón de Canvas
 

@@ -22,7 +22,7 @@ que hoy no tiene cómo reportar con evidencia y ubicación).
 
 **Integrantes del equipo**
 
-> Diego Gamba
+> Diego Gamba · Mariana Diez
 
 **Metodología de desarrollo móvil**
 

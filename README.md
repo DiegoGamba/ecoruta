@@ -297,8 +297,10 @@ genérico por un modelo propio ejecutable en el dispositivo. El planteamiento co
 
 ## Contexto académico
 
-Taller ABP · Entrega 1 — **Diseño de Aplicaciones Móviles**
-Facultad de Ingeniería, Ciencias y Administración.
+Taller ABP — **Diseño de Aplicaciones Móviles**
+Facultad de Ingeniería y Ciencias Ambientales.
+
+Diego Gamba · Mariana Diez
 
 ## Licencia
 
