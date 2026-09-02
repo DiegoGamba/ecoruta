@@ -44,6 +44,33 @@ AWS se conserva el cifrado sin el cargo fijo de custodia, que es lo razonable en
 ambiente de desarrollo o en un piloto académico. La justificación completa está en
 [ADR-009](05-decisiones-adr.md).
 
+## 4.3.1 Seguridad en el dispositivo
+
+El cliente móvil es territorio hostil: el usuario puede tener el teléfono rooteado, perderlo
+o instalarlo junto a aplicaciones maliciosas. El diseño parte de esa premisa.
+
+| Riesgo en el dispositivo | Control |
+|---|---|
+| Extracción de las credenciales de sesión | Los tokens los custodia **Amplify** en el almacenamiento seguro del sistema: **Keychain** en iOS y **EncryptedSharedPreferences** respaldado por el **Android Keystore**. La aplicación nunca los escribe en un archivo propio ni en `SharedPreferences` en claro |
+| Secreto de cliente extraído del APK | La app es un **cliente público sin secreto**: un secreto embebido en un paquete distribuido no es un secreto. Se usa **SRP**, de modo que la contraseña nunca viaja |
+| Robo de un token vigente | El token de acceso dura **60 minutos** y la revocación está habilitada en Cognito; el token de refresco vive 30 días y puede revocarse desde el servidor |
+| Intercepción del tráfico | **TLS 1.2 o superior** obligatorio; el bucket de evidencias rechaza cualquier petición sin `aws:SecureTransport` |
+| Lectura de la cola local de reportes | La cola sin conexión guarda **únicamente el contenido del reporte** —coordenadas, categoría, severidad—, nunca credenciales ni el token |
+| Autorización manipulada desde el cliente | La pertenencia al grupo `operadores` se lee del **claim firmado del JWT**, no de un campo que la aplicación pueda enviar |
+
+**Autenticación de las peticiones.** Cada llamada viaja con `Authorization: Bearer <JWT>`
+sobre TLS. Quien valida la firma es API Gateway, no la aplicación: el cliente no toma
+ninguna decisión de seguridad que el servidor no vuelva a verificar.
+
+**Permisos del sistema.** Cámara y ubicación se solicitan **en el momento del reporte**, no
+al abrir la aplicación, que es cuando el usuario entiende para qué se usan y puede negarlos
+con conocimiento. Si niega la ubicación, la aplicación degrada elegantemente en vez de
+bloquearse.
+
+**Pendiente reconocido.** No hay *certificate pinning* ni detección de dispositivo
+rooteado o con *jailbreak*. Para una aplicación de reporte ciudadano sin datos financieros
+el riesgo residual es aceptable, pero conviene declararlo.
+
 ## 4.4 Validación de entrada
 
 Toda entrada se valida en el borde de la función antes de tocar la persistencia:

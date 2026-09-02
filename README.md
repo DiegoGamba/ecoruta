@@ -2,9 +2,10 @@
 
 # EcoRuta
 
-**Reporte ciudadano y priorización automática de puntos críticos de residuos sólidos**
+**Aplicación móvil multiplataforma en Flutter para el reporte georreferenciado y la
+priorización automática de puntos críticos de residuos sólidos urbanos**
 
-App móvil Flutter + arquitectura serverless en AWS
+Flutter · offline-first · backend serverless en AWS
 
 [![CI](https://github.com/DiegoGamba/ecoruta/actions/workflows/ci.yml/badge.svg)](https://github.com/DiegoGamba/ecoruta/actions/workflows/ci.yml)
 ![Pruebas](https://img.shields.io/badge/pruebas-112%20passed-2E7D5B)
@@ -133,6 +134,11 @@ alternativas descartadas están en los [ADR](docs/05-decisiones-adr.md).
   explícitamente en un mapa de Terraform.
 - **112 pruebas que corren sin AWS**, porque el dominio no conoce la nube.
 
+> **Estado del proyecto.** La lógica de negocio funciona y se puede probar ahora mismo
+> (ver abajo). La infraestructura Terraform está completa y validada en el pipeline, pero
+> **aún no se ha aplicado a una cuenta de AWS**, y la app Flutter está escrita pero no
+> compilada en un dispositivo. El detalle exacto está en [`ESTADO.md`](ESTADO.md).
+
 ## Probarlo en 30 segundos
 
 Sin cuenta de AWS, sin credenciales y sin instalar nada — solo Python 3.12:
@@ -186,7 +192,7 @@ ecoruta/
 │   ├── local_server.py     Handlers reales + repositorio en memoria
 │   └── index.html          Mapa interactivo de puntos críticos
 │
-├── docs/                   Documentación técnica (11 documentos)
+├── docs/                   Documentación técnica (12 documentos)
 │   └── evidencias/         Capturas y salida de las pruebas
 │
 ├── presentacion/           Presentación del proyecto (PDF)
@@ -270,6 +276,7 @@ de la estrategia, resultados del agrupamiento y limitaciones reconocidas en
 | [9 · API](docs/09-api.md) | Referencia completa de los endpoints |
 | [10 · Guion de sustentación](docs/10-guion-sustentacion.md) | Qué decir en cada diapositiva y banco de preguntas |
 | [11 · Guion de video](docs/11-guion-video.md) | Guion cerrado para grabar la sustentación |
+| [12 · Respuestas a la guía del taller](docs/12-guia-taller.md) | Cada campo de la guía de Canvas, respondido |
 
 ## Presentación
 

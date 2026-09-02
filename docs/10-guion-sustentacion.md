@@ -10,10 +10,14 @@ diapositivas 6, 7 y 11 (marcadas como *recortables*). Si le dan 20, profundice e
 
 ## Antes de empezar
 
-- Abra **dos pestañas**: el repositorio en GitHub y la consola de AWS con el tablero de
-  CloudWatch. Que el evaluador vea que existe, no solo que se cuenta.
-- Tenga el celular con la app lista para reportar. Una demostración de 30 segundos vale
-  más que tres diapositivas.
+- Abra **dos pestañas**: el repositorio en GitHub y la página de Actions con el CI en
+  verde. Que el evaluador lo vea, no solo que se lo cuenten.
+- Deje corriendo la **demostración local** (`python3 demo/local_server.py`) en
+  `http://localhost:8000`. Treinta segundos de sistema funcionando valen más que tres
+  diapositivas.
+- **La app móvil no se demuestra**: su código está escrito y analizado por el CI, pero no
+  se ha compilado ni instalado en un dispositivo. Preséntela como lo que es —código
+  entregado— y haga la demostración con el servidor local.
 - Si algo falla en vivo, no improvise arreglos: pase a la captura en `docs/evidencias/` y
   siga. Nunca depure código delante del jurado.
 
@@ -62,11 +66,12 @@ críticos priorizados), porque son los que sustentan la demostración.
 ## Diapositiva 4 · La solución · 60 s
 
 Recorra los cinco pasos de izquierda a derecha, una frase cada uno. **Aquí es donde va la
-demostración en vivo**: saque el celular, tome una foto, envíe el reporte, y muestre en
-el mapa cómo aparece agrupado.
+demostración en vivo**, con el servidor local: haga clic en el mapa, envíe tres reportes
+en el mismo punto y muestre cómo aparece el punto crítico.
 
-> "Lo que acaban de ver son treinta segundos. Ese es el objetivo de diseño: si reportar
-> cuesta más que ignorar el problema, nadie reporta."
+> "Lo que corre ahí es el mismo código Python que se despliega en las Lambdas: la
+> validación, el geohash, el agrupamiento. Lo único sustituido es DynamoDB, por el
+> repositorio en memoria que usan las pruebas."
 
 ---
 
@@ -161,8 +166,8 @@ Los cuatro números, y **una historia concreta** que vale más que todos ellos:
 
 ## Diapositiva 11 · Costos · 60 s · *recortable*
 
-> "El piloto completo cuesta menos de cinco dólares al mes, y la demostración que acaban
-> de ver cabe en la capa gratuita de AWS. Pero el dato interesante es la composición: el
+> "La operación real de una localidad cuesta menos de cinco dólares al mes, y un
+> despliegue de demostración cabe en la capa gratuita de AWS. Pero el dato interesante es la composición: el
 > 62 % es el servicio de visión por computador. Eso no es un problema de presupuesto, es
 > el argumento de la siguiente diapositiva."
 
@@ -291,10 +296,12 @@ real del corpus habría que hacerlo, y así está planteado en la fase de invest
 ## Sobre la implementación
 
 **¿Esto funciona o es solo un diseño?**
-[Ajuste según su caso.] *Si desplegó:* funciona, acaban de verlo, y aquí está el tablero
-de CloudWatch con las métricas reales. *Si no desplegó:* la infraestructura está completa
-en Terraform y se despliega con un comando; lo que puedo demostrar hoy son las 112 pruebas
-automatizadas que ejercitan toda la lógica de negocio.
+La lógica de negocio funciona y acaban de verla corriendo: el agrupamiento, la validación
+y los indicadores son el código de producción. La infraestructura está completa en
+Terraform —43 recursos— y validada en el pipeline, pero **todavía no la he aplicado a una
+cuenta de AWS**, así que no puedo mostrarles la consola. Y la aplicación móvil está
+escrita y pasa el análisis estático, pero no la he compilado en un dispositivo. Eso es lo
+que sigue.
 
 **¿Cuánto de esto probaste?**
 112 pruebas automatizadas, 82 % de cobertura, con el dominio y la capa de servicios al

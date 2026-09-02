@@ -247,7 +247,41 @@ alarma número 11, unos diez centavos de dólar al mes.
 
 Para no gastar nada al terminar: `terraform destroy` elimina todo lo creado.
 
-### Escenario B — Operación real
+### Escenario B — Publicar y operar la aplicación durante un año
+
+El costo de una solución móvil no es solo el del backend: publicar en las tiendas tiene
+sus propias tarifas, y son las que dominan el primer año.
+
+| Concepto / servicio móvil | Proveedor | Frecuencia | Costo USD |
+|---|---|---|---|
+| Google Play Console | Google | Pago único | 25,00 |
+| Apple Developer Program | Apple | Suscripción anual | 99,00 |
+| Backend serverless (Lambda, API Gateway, DynamoDB, S3) | AWS | Mensual × 12 | 2,88 |
+| Clasificación de imágenes (Rekognition) | AWS | Mensual × 12 | 36,00 |
+| Notificaciones push (SNS) | AWS | Mensual × 12 | 1,20 |
+| Observabilidad (CloudWatch, EventBridge) | AWS | Mensual × 12 | 6,00 |
+| Mapas (OpenStreetMap) | OSMF | — | 0,00 |
+| **Total primer año** | | | **170,08** |
+| **Total años siguientes** (sin el pago único de Play) | | | **145,08** |
+
+Contra un presupuesto asignado de **300 USD**, el primer año consume el **56,7 %** y deja
+**43,3 % libre**.
+
+Dos decisiones explican esas cifras:
+
+- **Mapas con OpenStreetMap en lugar del SDK de Google Maps.** Google Maps cobra por carga
+  de mapa superado el crédito mensual; para una aplicación cuya pantalla principal *es* un
+  mapa, ese renglón crecería con el uso. OpenStreetMap no tiene ese costo, a cambio de una
+  cartografía algo menos detallada en zonas periféricas —justamente donde el proyecto
+  opera, así que conviene vigilarlo.
+- **Rekognition es el 21 % del total anual** y el único renglón que escala con los
+  reportes. Sustituirlo por un clasificador propio ejecutado en el dispositivo lo llevaría
+  a cero; es el argumento económico de la línea de investigación.
+
+Si solo se publica en Android, el primer año baja a **71,08 USD**: los 99 USD anuales de
+Apple son la barrera de entrada más costosa para un piloto académico.
+
+### Escenario C — Operación del backend a escala real
 
 Una localidad con 3.000 reportes/mes, 30.000 consultas de mapa/mes y foto promedio de
 400 KB, ya fuera de la capa gratuita:

@@ -30,30 +30,77 @@ vectores, obstrucción de sumideros y deterioro del espacio público.
 | Flujo cubierto | Reporte georreferenciado → clasificación → agrupamiento → priorización → cierre |
 | Fuera de alcance | Facturación del servicio, despacho de vehículos, comparendo ambiental |
 
-## 1.3 Pregunta que guía el proyecto
+## 1.3 Pregunta problema
 
-> ¿Puede un flujo de reporte ciudadano georreferenciado, con evidencia fotográfica y
-> agrupamiento espacial automático, producir un inventario de puntos críticos más
+> **¿De qué manera el diseño de una aplicación móvil multiplataforma en Flutter, con
+> captura georreferenciada y sincronización *offline-first*, permite reducir a menos de
+> 60 segundos el tiempo de reporte de un punto crítico de residuos sólidos y sostener una
+> tasa de envío exitoso superior al 95 % en zonas con conectividad intermitente?**
+
+La pregunta es de ingeniería de software móvil y es medible: sus dos variables —tiempo de
+registro y tasa de envío— se instrumentan en la propia aplicación.
+
+De ella se desprende una pregunta de alcance investigativo, que orienta la continuidad del
+trabajo en el semillero y se desarrolla en el [documento 7](07-proyeccion-investigativa.md):
+
+> ¿Puede el inventario de puntos críticos derivado de reportes ciudadanos resultar más
 > actualizado y accionable que el levantamiento manual periódico?
 
 ## 1.4 Objetivos
 
-**General.** Diseñar e implementar una solución móvil respaldada por una arquitectura
-en la nube que capture, clasifique y priorice puntos críticos de residuos sólidos a
-partir del reporte ciudadano.
+### Objetivo general (SMART)
 
-**Específicos**
+> **Desarrollar** una aplicación móvil multiplataforma en **Flutter** con sincronización
+> *offline-first*, que permita a un ciudadano registrar un punto crítico de residuos
+> sólidos —georreferenciado y con evidencia fotográfica— en **menos de 60 segundos**,
+> sosteniendo una **tasa de envío exitoso superior al 95 %** en zonas con conectividad
+> intermitente, **antes del 10 de septiembre de 2026**.
 
-1. Capturar un reporte georreferenciado con evidencia fotográfica en menos de 60 segundos,
-   incluso sin conectividad en el momento de la captura.
-2. Convertir reportes individuales dispersos en **puntos críticos** mediante agrupamiento
-   espacial, y priorizarlos por severidad acumulada.
-3. Sugerir automáticamente el tipo de residuo a partir de la fotografía, para reducir la
-   carga de clasificación sobre el ciudadano y estandarizar el dato.
-4. Notificar de inmediato al operador cuando el reporte involucre residuos peligrosos o
-   severidad alta.
-5. Exponer indicadores operativos (volumen, tasa de atención, pendientes) para el
-   seguimiento de la entidad.
+| Criterio | Cómo lo cumple |
+|---|---|
+| **E**specífico | Una app Flutter para un flujo concreto: capturar y enviar un reporte georreferenciado |
+| **M**edible | Dos métricas instrumentables: tiempo de registro (< 60 s) y tasa de envío (> 95 %) |
+| **A**lcanzable | La cola local en el dispositivo hace viable la tasa de envío sin conectividad continua |
+| **R**elevante | Ataca la causa por la que el reporte ciudadano no fluye hoy: fricción y falta de señal |
+| **T**emporal | Fecha límite del taller: 10 de septiembre de 2026 |
+
+### Objetivos específicos
+
+Siguen los tres pasos del ciclo de vida móvil.
+
+**Paso 1 · Investigación de usuario y prototipado UX/UI.**
+Diseñar el flujo de captura y las tres pantallas de la aplicación (reporte, mapa de puntos
+críticos y navegación), evaluando las heurísticas de usabilidad de Nielsen y verificando
+contraste accesible AA y objetivos táctiles de al menos 48 dp, en la **semana 3**.
+
+**Paso 2 · Desarrollo del frontend móvil e integración con el backend.**
+Programar los módulos del cliente en Flutter —captura con cámara y GPS, cola local de
+envíos y mapa— e integrar el consumo de la API REST desplegada sobre AWS con
+autenticación por Cognito, en la **semana 6**.
+
+**Paso 3 · Pruebas en dispositivos reales y medición de rendimiento.**
+Medir en dispositivos Android e iOS el tiempo de registro de un reporte, la tasa de envío
+exitoso en modo avión y con red intermitente, el consumo de batería durante una sesión de
+captura y la usabilidad percibida mediante el cuestionario SUS, en la **semana 8**.
+
+## 1.4.1 Metodología de desarrollo
+
+**Scrum adaptado al ciclo de vida móvil**, con sprints de dos semanas. Se eligió por dos
+razones: el alcance se descubre a medida que se prueba con usuarios reales, y cada sprint
+debe cerrar con un incremento instalable en un dispositivo, no con un documento.
+
+Cada sprint recorre las cuatro actividades del ciclo móvil:
+
+| Actividad | Qué produce | Artefacto en este repositorio |
+|---|---|---|
+| **Diseño UX/UI** | Flujo de pantallas, sistema visual accesible | `mobile/lib/theme.dart`, `mobile/lib/screens/` |
+| **Prototipado** | Pantallas navegables sobre datos de prueba | Demostración local (`demo/`) |
+| **Sprint de código** | Incremento probado y en integración continua | Commits + `.github/workflows/ci.yml` |
+| **Pruebas en dispositivos** | Métricas de tiempo, batería y usabilidad | Pendiente: es el objetivo específico 3 |
+
+Se consideró **Mobile-D**, que es una metodología específica para desarrollo móvil, pero su
+estructura de cinco fases resulta pesada para un equipo de una persona y un horizonte de
+ocho semanas. Scrum adaptado conserva la cadencia corta sin la carga ceremonial.
 
 ## 1.5 Justificación de la propuesta tecnológica
 

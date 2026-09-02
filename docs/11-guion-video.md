@@ -1,6 +1,6 @@
 # 11. Guion para grabar el video de sustentación
 
-Guion cerrado, listo para leer. **Duración objetivo: 9–11 minutos.**
+Guion cerrado, listo para leer. **Duración objetivo: 11–13 minutos.**
 
 Este documento asume que el proyecto **no está desplegado en AWS** y que la demostración
 se hace con el servidor local. Si alcanza a desplegar antes de grabar, la única sección
@@ -79,10 +79,10 @@ python3 demo/local_server.py
 
 *(Diapositiva 3, luego 4)*
 
-> La pregunta que guía el proyecto es esta: **¿puede un flujo de reporte ciudadano
-> georreferenciado, con evidencia fotográfica y agrupamiento espacial automático,
-> producir un inventario de puntos críticos más actualizado y accionable que el
-> levantamiento manual periódico?**
+> La pregunta problema es esta: **¿de qué manera el diseño de una aplicación móvil
+> multiplataforma en Flutter, con captura georreferenciada y sincronización offline-first,
+> permite reducir a menos de 60 segundos el tiempo de reporte de un punto crítico y
+> sostener una tasa de envío superior al 95 % en zonas con conectividad intermitente?**
 >
 > *(pase a la diapositiva 4)*
 >
@@ -96,6 +96,28 @@ python3 demo/local_server.py
 > en el dispositivo y se reintenta solo. Perder el reporte después de que el ciudadano se
 > tomó el trabajo de capturar la evidencia es la forma más segura de que no vuelva a usar
 > la aplicación.
+
+---
+
+## Sección 3.5 · Objetivos y metodología · 45 s
+
+*(Siga en la diapositiva 3)*
+
+> El objetivo general es medible: **registrar un reporte georreferenciado con evidencia en
+> menos de 60 segundos, con una tasa de envío superior al 95 % en zonas con conectividad
+> intermitente**, antes del 10 de septiembre.
+>
+> Los objetivos específicos siguen el ciclo de vida móvil en tres pasos: primero diseño
+> UX/UI y prototipado; segundo, desarrollo del cliente Flutter e integración con el backend;
+> y tercero, pruebas en dispositivos reales midiendo tiempo de registro, batería y
+> usabilidad con el cuestionario SUS.
+>
+> La metodología es **Scrum adaptado al ciclo móvil**, con sprints de dos semanas. Consideré
+> Mobile-D, que es específica para móviles, pero sus cinco fases son pesadas para un equipo
+> de una persona en ocho semanas.
+
+**Sea explícito con dónde va el proyecto:** los pasos 1 y 2 están ejecutados; el paso 3 —las
+pruebas en dispositivos reales— es lo que sigue.
 
 ---
 
@@ -217,15 +239,32 @@ python3 demo/local_server.py
 
 ---
 
+## Sección 6.5 · Seguridad en el dispositivo · 45 s
+
+> En el cliente móvil parto de que el dispositivo es territorio hostil. Los tokens no los
+> guarda mi código: los custodia el almacenamiento seguro del sistema —Keychain en iOS,
+> EncryptedSharedPreferences sobre el Android Keystore—. La app es un cliente **público sin
+> secreto**, porque un secreto embebido en un APK que distribuyo no es un secreto; autentica
+> con SRP, así que la contraseña nunca viaja.
+>
+> Y la cola de reportes sin conexión guarda solo el contenido del reporte, nunca
+> credenciales.
+
+---
+
 ## Sección 7 · Costos y proyección investigativa · 1 min 30 s
 
 *(Diapositiva 11, luego 12)*
 
-> Sobre el costo: la operación real de una localidad completa cuesta menos de cinco
-> dólares al mes, y un despliegue de demostración cabe dentro de la capa gratuita de AWS.
-> Pero el dato interesante es la composición: **el 62 % es el servicio de visión por
-> computador**. Y eso no es un problema de presupuesto, es el argumento de la siguiente
-> diapositiva.
+> Sobre el costo: publicar y operar la aplicación durante el primer año cuesta **170
+> dólares**, contra un presupuesto de 300: queda un 43 % libre. Y las dos terceras partes
+> de ese monto no son infraestructura, son las **tarifas de las tiendas**: 25 dólares de
+> Google Play y 99 anuales de Apple.
+>
+> Del lado del backend, un despliegue de demostración cabe en la capa gratuita. Ahí el dato
+> interesante es la composición: el renglón que más pesa y el único que escala con el uso es
+> el servicio de visión por computador. Y eso no es un problema de presupuesto, es el
+> argumento de la siguiente diapositiva.
 >
 > *(diapositiva 12)*
 >
