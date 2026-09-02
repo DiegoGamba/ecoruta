@@ -137,7 +137,7 @@ alternativas descartadas están en los [ADR](docs/05-decisiones-adr.md).
 > **Estado del proyecto.** La lógica de negocio funciona y se puede probar ahora mismo
 > (ver abajo). La infraestructura Terraform está completa y validada en el pipeline, pero
 > **aún no se ha aplicado a una cuenta de AWS**, y la app Flutter está escrita pero no
-> compilada en un dispositivo. El detalle exacto está en [`ESTADO.md`](ESTADO.md).
+> compilada en un dispositivo.
 
 ## Probarlo en 30 segundos
 
@@ -192,7 +192,7 @@ ecoruta/
 │   ├── local_server.py     Handlers reales + repositorio en memoria
 │   └── index.html          Mapa interactivo de puntos críticos
 │
-├── docs/                   Documentación técnica (13 documentos)
+├── docs/                   Documentación técnica (9 documentos)
 │   └── evidencias/         Capturas y salida de las pruebas
 │
 ├── presentacion/           Presentación del proyecto (PDF)
@@ -274,17 +274,13 @@ de la estrategia, resultados del agrupamiento y limitaciones reconocidas en
 | [7 · Proyección investigativa](docs/07-proyeccion-investigativa.md) | Preguntas, metodología y productos esperados |
 | [8 · Despliegue](docs/08-despliegue.md) | Guía paso a paso y solución de problemas |
 | [9 · API](docs/09-api.md) | Referencia completa de los endpoints |
-| [10 · Guion de sustentación](docs/10-guion-sustentacion.md) | Qué decir en cada diapositiva y banco de preguntas |
-| [11 · Guion de video](docs/11-guion-video.md) | Guion cerrado para grabar la sustentación |
-| [12 · Respuestas a la guía del taller](docs/12-guia-taller.md) | Cada campo de la guía de Canvas, respondido |
-| [13 · Guion del video (5 min)](docs/13-guion-video-5min.md) | Guion cronometrado para la Entrega 2 |
 
 ## Presentación y sustentación
 
 - [`presentacion/EcoRuta-presentacion.pdf`](presentacion/) — 14 diapositivas: problema,
   solución, arquitectura y resultados.
-- [`presentacion/miniatura/`](presentacion/miniatura/) — miniatura 16:9 para el video.
-- [`docs/13-guion-video-5min.md`](docs/13-guion-video-5min.md) — guion cronometrado.
+- [`presentacion/miniatura/`](presentacion/miniatura/) — miniatura 16:9 para el video
+  de sustentación.
 
 ## Proyección investigativa
 
