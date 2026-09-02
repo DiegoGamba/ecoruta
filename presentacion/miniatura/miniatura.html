@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: 1280px 720px; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1280px; height: 720px; overflow: hidden;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #14300F;
+    position: relative;
+  }
+  /* Formas de fondo: dan profundidad sin restar legibilidad al texto */
+  .blob { position: absolute; border-radius: 50%; }
+  .b1 { width: 760px; height: 760px; right: -230px; top: -300px; background: #2C5F2D; opacity: .55; }
+  .b2 { width: 420px; height: 420px; right: 60px;   bottom: -190px; background: #97BC62; opacity: .16; }
+  .b3 { width: 300px; height: 300px; left: -110px;  bottom: -120px; background: #2C5F2D; opacity: .5; }
+
+  .lienzo { position: relative; display: flex; height: 100%; align-items: center; padding: 0 60px; gap: 52px; }
+
+  /* ---- Retrato del estudiante (mitad izquierda) ---- */
+  .retrato {
+    width: 348px; height: 348px; flex-shrink: 0; border-radius: 50%;
+    border: 8px solid #97BC62; overflow: hidden;
+    background: #1F4419; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 18px 50px rgba(0,0,0,.45);
+  }
+  .retrato img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .marcador { text-align: center; color: #97BC62; padding: 0 26px; }
+  .marcador .icono { font-size: 74px; line-height: 1; }
+  .marcador .texto { font-size: 21px; font-weight: 700; margin-top: 14px; line-height: 1.35; }
+
+  /* ---- Texto (mitad derecha) ---- */
+  .contenido { flex: 1; min-width: 0; }
+  .kicker {
+    font-size: 24px; font-weight: 800; letter-spacing: 4px;
+    color: #97BC62; margin-bottom: 10px;
+  }
+  h1 {
+    font-size: 104px; font-weight: 800; color: #fff; line-height: .95;
+    letter-spacing: -2px; margin-bottom: 12px;
+  }
+  .bajada {
+    font-size: 27px; font-weight: 600; color: #E6F0DA; line-height: 1.25;
+    margin-bottom: 26px;
+  }
+  .rotulo {
+    font-size: 18px; font-weight: 800; letter-spacing: 2.5px;
+    color: #7FA85C; margin-bottom: 9px;
+  }
+  .fichas { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 22px; }
+  .ficha {
+    font-size: 24px; font-weight: 700; color: #14300F; background: #97BC62;
+    padding: 7px 17px; border-radius: 999px; white-space: nowrap;
+  }
+  .ficha.hueca { background: transparent; color: #DCEBC8; border: 2.5px solid #5E8A46; }
+  .pie {
+    display: flex; align-items: baseline; gap: 16px;
+    border-top: 2px solid #3C6B33; padding-top: 16px;
+  }
+  .pie .nombre { font-size: 30px; font-weight: 800; color: #fff; }
+  .pie .curso  { font-size: 21px; font-weight: 600; color: #97BC62; }
+</style>
+</head>
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <div class="lienzo">
+    <div class="retrato">
+      <!-- Reemplace este bloque por: <img src="avatar.png" alt="Diego Gamba"> -->
+      <div class="marcador">
+        <div class="icono">👤</div>
+        <div class="texto">FOTO O AVATAR<br>DEL ESTUDIANTE</div>
+      </div>
+    </div>
+
+    <div class="contenido">
+      <div class="kicker">TALLER ABP · SUSTENTACIÓN</div>
+      <h1>EcoRuta</h1>
+      <div class="bajada">App móvil para el reporte y la priorización<br>de puntos críticos de residuos sólidos</div>
+
+      <div class="rotulo">TEMAS</div>
+      <div class="fichas">
+        <span class="ficha">Arquitectura Cloud</span>
+        <span class="ficha">Apps multiplataforma</span>
+        <span class="ficha">Geolocalización</span>
+      </div>
+
+      <div class="rotulo">HERRAMIENTAS</div>
+      <div class="fichas">
+        <span class="ficha hueca">Flutter</span>
+        <span class="ficha hueca">AWS Lambda</span>
+        <span class="ficha hueca">DynamoDB</span>
+        <span class="ficha hueca">Terraform</span>
+        <span class="ficha hueca">Python</span>
+      </div>
+
+      <div class="pie">
+        <span class="nombre">Diego Gamba</span>
+        <span class="curso">Diseño de Aplicaciones Móviles</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

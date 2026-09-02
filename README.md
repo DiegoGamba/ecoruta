@@ -192,7 +192,7 @@ ecoruta/
 │   ├── local_server.py     Handlers reales + repositorio en memoria
 │   └── index.html          Mapa interactivo de puntos críticos
 │
-├── docs/                   Documentación técnica (12 documentos)
+├── docs/                   Documentación técnica (13 documentos)
 │   └── evidencias/         Capturas y salida de las pruebas
 │
 ├── presentacion/           Presentación del proyecto (PDF)
@@ -277,11 +277,14 @@ de la estrategia, resultados del agrupamiento y limitaciones reconocidas en
 | [10 · Guion de sustentación](docs/10-guion-sustentacion.md) | Qué decir en cada diapositiva y banco de preguntas |
 | [11 · Guion de video](docs/11-guion-video.md) | Guion cerrado para grabar la sustentación |
 | [12 · Respuestas a la guía del taller](docs/12-guia-taller.md) | Cada campo de la guía de Canvas, respondido |
+| [13 · Guion del video (5 min)](docs/13-guion-video-5min.md) | Guion cronometrado para la Entrega 2 |
 
-## Presentación
+## Presentación y sustentación
 
-[`presentacion/EcoRuta-presentacion.pdf`](presentacion/) — problema, solución,
-arquitectura y resultados.
+- [`presentacion/EcoRuta-presentacion.pdf`](presentacion/) — 14 diapositivas: problema,
+  solución, arquitectura y resultados.
+- [`presentacion/miniatura/`](presentacion/miniatura/) — miniatura 16:9 para el video.
+- [`docs/13-guion-video-5min.md`](docs/13-guion-video-5min.md) — guion cronometrado.
 
 ## Proyección investigativa
 
